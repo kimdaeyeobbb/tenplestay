@@ -1,0 +1,85 @@
+[tool.poetry]
+name = "backend"
+version = "0.1.0"
+description = "2023.12 ) potenday - Get all notifications what you want by \"Tenplestay\" [ Notification Web Scrapper SaaS ]"
+authors = ["Nuung <qlgks1@naver.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.31.0"
+django = "^4.2.6"
+django-environ = "^0.11.2"
+django-cors-headers = "^4.3.0"
+django-debug-toolbar = "^4.2.0"
+djangorestframework = "^3.14.0"
+djangorestframework-simplejwt = "^5.3.0"
+dj-rest-auth = "^5.0.1"
+django-allauth = "^0.57.0"
+coverage = "^7.3.2"
+django-coverage-plugin = "^3.1.0"
+pytest = "^7.4.2"
+pytest-django = "^4.5.2"
+pytest-cov = "^4.1.0"
+drf-yasg = "^1.21.7"
+beautifulsoup4 = "^4.12.2"
+lxml = "^4.9.3"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.9.1"
+flake8 = "^6.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+# 아래 섹션은 black의 설정입니다.
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+# 아래 섹션은 flake8의 설정입니다.
+[tool.flake8]
+ignore = "E203, E501, W503"
+max-line-length = 88
+exclude = ".git,__pycache__,docs/,old/,build/,dist/"
+
+# 아래 섹션은 pytest 설정
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.prod"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+
+# 아래 섹션은 pytest-cov & coverage 설정
+[tool.coverage.run]
+omit = [
+    "*/migrations/*",
+    "*/__pycache__/*",
+    "manage.py",
+    "*wsgi.py",
+    "*/.venv/*",
+    "*/__init__.py",
+    "*/test_*.py",
+]
+plugins = ["django_coverage_plugin"]
+
+[tool.coverage.report]
+fail_under = 70
+show_missing = true
+skip_covered = false # 완벽하게 커버된 것들도 리포트에 포함, true는 100%는 제외함
+
+[tool.coverage.html]
+directory = "coverage_html_report"
+show_contexts = true
