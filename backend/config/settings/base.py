@@ -24,6 +24,7 @@ env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False)
 )
+# environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -78,6 +79,8 @@ SITE_ID = 1
 # added django app list
 APP_LIST = [
     "apps.accounts",
+    "apps.scraping",
+    "apps.notifications",
 ]
 INSTALLED_APPS += APP_LIST
 

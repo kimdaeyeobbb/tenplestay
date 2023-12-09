@@ -24,6 +24,7 @@ pytest-cov = "^4.1.0"
 drf-yasg = "^1.21.7"
 beautifulsoup4 = "^4.12.2"
 lxml = "^4.9.3"
+psycopg2 = "^2.9.9"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.9.1"
