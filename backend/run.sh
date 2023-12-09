@@ -7,7 +7,7 @@
 source  .venv/bin/activate
 pip install -r requirements.txt
 
-# export DJANGO_SETTINGS_MODULE=...
+export DJANGO_SETTINGS_MODULE=config.settings.dev
 python manage.py collectstatic
 python manage.py migrate
 
