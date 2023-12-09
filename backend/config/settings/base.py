@@ -38,6 +38,7 @@ DEBUG = env("DEBUG")
 SECRET_KEY = env("SECRET_KEY")
 
 ALLOWED_HOSTS = ["tenplestay.kro.kr", "localhost", "127.0.0.1"]
+CSRF_TRUSTED_ORIGINS = ["https://tenplestay.kro.kr"]
 
 AUTH_USER_MODEL = "accounts.User"  # for get Auth user model
 
