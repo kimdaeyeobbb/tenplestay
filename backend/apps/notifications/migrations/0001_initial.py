@@ -127,5 +127,5 @@ class Migration(migrations.Migration):
                 "abstract": False,
             },
         ),
-        # migrations.RunPython(create_dummy_data),
+        migrations.RunPython(create_dummy_data),
     ]

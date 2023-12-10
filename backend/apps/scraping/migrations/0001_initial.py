@@ -181,5 +181,5 @@ class Migration(migrations.Migration):
                 ],
             },
         ),
-        # migrations.RunPython(create_dummy_data),
+        migrations.RunPython(create_dummy_data),
     ]
