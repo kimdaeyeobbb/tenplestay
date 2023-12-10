@@ -59,7 +59,7 @@ async def fetch_all_url(result: list[dict]):
 
 
 async def scrapping(rep: Repository, group_id: str):
-    result: list[dict] = rep.get_all_scraping_urls_by_group(group_id)
+    result: list[dict] = await rep.get_all_scraping_urls_by_group(group_id)
     request_result = await fetch_all_url(result)
 
     # 키워드 체크 & 변화 체크 & 바뀌었으면 noti에 insert into
