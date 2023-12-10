@@ -12,4 +12,10 @@ python manage.py collectstatic --no-input
 python manage.py migrate
 
 sleep 1
-gunicorn --workers 3 --bind 0.0.0.0:8000 --log-level=info --log-file=./gunicorn.log --access-logfile=./gunicorn-access.log --error-logfile=./gunicorn-error.log config.wsgi:application
+nohub gunicorn --workers 3 --bind 0.0.0.0:8000 --log-level=info --log-file=./gunicorn.log --access-logfile=./gunicorn-access.log --error-logfile=./gunicorn-error.log config.wsgi:application --daemon
+echo "==================== TenpleStay Django Application Run ===================="
+
+sleep 1
+ps -ef | grep gunicorn | grep -v grep
+
+tail -f ./gunicorn-access.log
