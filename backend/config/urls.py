@@ -36,6 +36,7 @@ urlpatterns = [
 
 urlpatterns += [
     path("api/accounts/", include("apps.accounts.urls")),
+    path("api/scraping/", include("apps.scraping.urls")),
 ]
 
 
