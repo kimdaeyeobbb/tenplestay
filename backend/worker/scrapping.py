@@ -63,6 +63,7 @@ async def scrapping(rep: Repository, group_id: str):
     request_result = await fetch_all_url(result)
 
     # 키워드 체크 & 변화 체크 & 바뀌었으면 noti에 insert into
+    await rep.close()
 
 
 def run_scrapping(group_id):
@@ -79,7 +80,6 @@ def run_scrapping(group_id):
         loop.run_until_complete(scrapping(rep, group_id))
     finally:
         loop.close()
-        rep.close()
 
 
 async def main():
@@ -94,7 +94,7 @@ async def main():
     if not target_groups:
         log.info("empty target user")
 
-    target_groups = [group.id for group in target_groups]
+    target_groups = [group["id"] for group in target_groups]
     await rep.close()
     # ProcessPoolExecutor를 사용하여 각 사용자에 대한 scrapping 함수를 별도의 프로세스에서 실행
     with ProcessPoolExecutor() as executor:
