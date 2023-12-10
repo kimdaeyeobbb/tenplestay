@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from rest_framework import viewsets
 
-# Create your views here.
+from .models import ScrapingUrl
+from .serializers import ScrapingUrlSerializer
+
+
+class ScrapingUrlViewSet(viewsets.ModelViewSet):
+    queryset = ScrapingUrl.objects.all()
+    serializer_class = ScrapingUrlSerializer
