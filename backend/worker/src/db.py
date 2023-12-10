@@ -34,25 +34,26 @@ class Repository:
         except Exception:
             return False
 
-    async def get_all_scraping_urls(self):
+    async def get_all_scraping_urls_by_group(self, group_id) -> list[dict]:
         try:
-            sql = """
+            sql = f"""
                 select *
-                from scraping_scrapingurl;
+                from scraping_scrapingurl ss 
+                where ss.scraping_group_id = {group_id}
             """
             result = await self.conn.fetch(sql)
-            return result
+            return [dict(record) for record in result]
         except Exception as e:
             print(e)
 
-    async def get_all_scraping_groups(self):
+    async def get_all_scraping_groups(self) -> list[dict]:
         try:
             sql = """
                 select *
                 from scraping_scrapinggroup;
             """
             result = await self.conn.fetch(sql)
-            return result
+            return [dict(record) for record in result]
         except Exception as e:
             print(e)
 

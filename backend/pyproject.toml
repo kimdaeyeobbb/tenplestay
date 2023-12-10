@@ -28,6 +28,8 @@ psycopg2 = "^2.9.9"
 gunicorn = "^21.2.0"
 asyncpg = "^0.29.0"
 python-dotenv = "^1.0.0"
+aiohttp-retry = "^2.8.3"
+fake-useragent = "^1.4.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.9.1"
