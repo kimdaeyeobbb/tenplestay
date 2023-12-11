@@ -16,3 +16,7 @@ class ScrapingUrlSerializer(serializers.ModelSerializer):
         model = ScrapingUrl
         fields = "__all__"
         read_only_fields = ("id", "scraping_group", "user", "last_scraping_log")
+
+
+class ScrapingUrlAPISerializer(serializers.Serializer):
+    url = serializers.URLField()

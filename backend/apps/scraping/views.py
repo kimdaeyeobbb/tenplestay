@@ -6,10 +6,12 @@ from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from bs4 import BeautifulSoup
 
 from utils.utils import extract_domain
+from utils.retry_session import get_retry_session, get_header
 from .models import ScrapingUrl, ScrapingGroup
-from .serializers import ScrapingUrlSerializer
+from .serializers import ScrapingUrlSerializer, ScrapingUrlAPISerializer
 
 
 class ScrapingUrlListCreateAPIView(generics.ListCreateAPIView):
@@ -48,3 +50,21 @@ class ScrapingDomainStatsAPIView(APIView):
         domains = [extract_domain(url) for url in urls]
         domain_counts = Counter(domains)
         return Response(domain_counts)
+
+
+class ScrapingUrlAPI(APIView):
+    """사용자가 url 제출 누르면 미리보기를 위해 사용하는 API"""
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ScrapingUrlAPISerializer(data=request.data)
+        if serializer.is_valid():
+            url = request.data.get("url")
+            s = get_retry_session()
+            res = s.get(url, headers=get_header())
+            html = BeautifulSoup(res.content, "lxml")
+            return Response({"result": str(html)})
+        else:
+            # 유효하지 않은 데이터 처리 (예: 'my_data' 필드가 누락된 경우)
+            return Response(serializer.errors, status=400)
