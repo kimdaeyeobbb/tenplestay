@@ -24,11 +24,14 @@
   },
   "include": [
     ".eslintrc.cjs",
-    "src"
+    "src",
+    "src/**/*.ts",
+    "src/**/*.tsx"
   ],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    },
-  ],
+  "baseUrl": "./",
+  "paths": {
+    "@/*": [
+      "src/*"
+    ]
+  }
 }
