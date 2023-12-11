@@ -27,8 +27,16 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
-    project: './tsconfig.json',
   },
   plugins: ['@typescript-eslint', 'react', 'prettier'],
-  rules: { 'react/react-in-jsx-scope': 'off' },
+  rules: {
+    'react/react-in-jsx-scope': 'off',
+    'react/function-component-definition': 'off',
+    // 'import/extensions': [
+    //   'error',
+    //   'ignorePackages',
+    //   { ts: 'never', tsx: 'never' },
+    // ],
+    // 'import/no-extraneous-dependencies': ['error', { devDependencies: false }],
+  },
 };

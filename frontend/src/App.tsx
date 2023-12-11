@@ -1,8 +1,16 @@
+import CommonRouter from './routes/CommonRouter';
+import MainLayout from './layouts/MainLayout';
+import { BrowserRouter } from 'react-router-dom';
+
 function App() {
   return (
-    <div className="bg-GrayScale-50">
-      zz<span className="text-4xl">dd</span>
-    </div>
+    <BrowserRouter>
+      <MainLayout>
+        {/* router가 있는 위치 */}
+        {/* MainLayout의 children 자리에 들어가게 됨 */}
+        <CommonRouter />
+      </MainLayout>
+    </BrowserRouter>
   );
 }
 
