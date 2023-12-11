@@ -3,7 +3,7 @@ import Input from '../../ui/Input';
 
 const Header = () => {
   return (
-    <header className="border-b py-4 px-4 sm:px-10 font-[sans-serif] min-h-[70px]">
+    <header className="border-b border-brand-dark py-4 px-4 sm:px-10 font-[sans-serif] min-h-[70px]">
       <div className="flex flex-wrap justify-between items-center gap-x-2 max-lg:gap-y-6">
         <a href="javascript:void(0)">
           <div className="flex">
@@ -35,7 +35,7 @@ const Header = () => {
         <ul className="flex items-center lg:ml-14 lg:space-x-5 max-lg:space-y-2 max-lg:block max-lg:w-full">
           <li className="max-lg:border-b max-lg:py-2 px-3">
             <Input
-              type="number"
+              type="text"
               label="search"
               value=""
               name=""
