@@ -62,9 +62,13 @@ class ScrapingUrlAPI(APIView):
         if serializer.is_valid():
             url = request.data.get("url")
             s = get_retry_session()
-            res = s.get(url, headers=get_header())
-            html = BeautifulSoup(res.content, "lxml")
-            return Response({"result": str(html)})
+            try:
+                res = s.get(url, headers=get_header())
+                html = BeautifulSoup(res.content, "lxml")
+                return Response({"result": str(html)})
+            except Exception as e:
+                html = BeautifulSoup(res.content)
+                return Response({"result": str(html)})
         else:
             # 유효하지 않은 데이터 처리 (예: 'my_data' 필드가 누락된 경우)
             return Response(serializer.errors, status=400)
