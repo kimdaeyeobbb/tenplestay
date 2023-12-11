@@ -99,6 +99,10 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",  # django-allauth
     "corsheaders.middleware.CorsMiddleware",  # cors, django-cors-headers
     "debug_toolbar.middleware.DebugToolbarMiddleware",  # debug (side tool bar), django-debug-toolbar
+    # ============ #
+    # custom
+    # ============ #
+    "middleware.response.StandardizeApiResponseMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -148,12 +152,23 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     # "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
+    # 카멜케이스 처리
+    "DEFAULT_RENDERER_CLASSES": (
+        "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
+        # 기타 렌더러들...
+    ),
+    "DEFAULT_PARSER_CLASSES": (
+        "djangorestframework_camel_case.parser.CamelCaseFormParser",
+        "djangorestframework_camel_case.parser.CamelCaseMultiPartParser",
+        "djangorestframework_camel_case.parser.CamelCaseJSONParser",
+        # 기타 파서들...
+    ),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    # "DEFAULT_PAGINATION_CLASS": "config.pagination.DefaultPagination",  # 커스텀 페이지네이션 사용 선언
     "PAGE_SIZE": DEFAULT_PAGE_SIZE,
-    # 'EXCEPTION_HANDLER': 'config.exceptions.base.custom_exception_handler',
+    "DEFAULT_PAGINATION_CLASS": "utils.paginations.CustomPagination",
+    # "EXCEPTION_HANDLER": "utils.exceptions.custom_exception_handler",
 }
 
 # https://docs.djangoproject.com/en/4.2/topics/email/#email-backends
