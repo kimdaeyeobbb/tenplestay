@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.notifications.serializers import NotiPlatformSerializer
 from .models import ScrapingUrl, ScrapingLog
 
 

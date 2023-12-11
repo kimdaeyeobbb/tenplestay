@@ -59,6 +59,7 @@ async def fetch_all_url(result: list[dict]):
 
 
 async def scrapping(rep: Repository, group_id: str):
+    await rep.initialize()
     result: list[dict] = await rep.get_all_scraping_urls_by_group(group_id)
     request_result = await fetch_all_url(result)
 
@@ -96,7 +97,9 @@ async def main():
 
     target_groups = [group["id"] for group in target_groups]
     await rep.close()
-    # ProcessPoolExecutor를 사용하여 각 사용자에 대한 scrapping 함수를 별도의 프로세스에서 실행
+
+    # ProcessPoolExecutor를 사용하여 각 그룹에 대한
+    # scrapping 함수를 별도의 프로세스에서 실행 -> 그룹 개수만큼 멀티프로세싱
     with ProcessPoolExecutor() as executor:
         executor.map(run_scrapping, target_groups)
 

@@ -43,6 +43,30 @@ class ScrapingUrl(BaseModel):
         null=True,
     )
 
+    # ================================================ #
+    # 노티 플랫폼 관련
+    # ================================================ #
+
+    main_noti_platform = models.ForeignKey(
+        "notifications.NotiPlatform",
+        blank=False,
+        null=True,
+        on_delete=models.SET_NULL,
+        help_text="사용자가 어떤 알림을 메인으로 받을지 저장하는 필드입니다.",
+        verbose_name="메인 알림 플랫폼",
+        related_name="scraping_main_platform",
+    )
+    sub_noti_platform = models.ForeignKey(
+        "notifications.NotiPlatform",
+        default=None,
+        blank=False,
+        null=True,
+        on_delete=models.SET_NULL,
+        help_text="사용자가 어떤 알림을 서브로 받을지 저장하는 필드입니다.",
+        verbose_name="서브 알림 플랫폼",
+        related_name="scraping_sub_platform",
+    )
+
     class Meta:
         indexes = [
             models.Index(fields=["user", "website"], name="user_website_idx"),

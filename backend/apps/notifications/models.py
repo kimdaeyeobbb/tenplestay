@@ -34,16 +34,17 @@ class Noti(BaseModel):
         on_delete=models.SET_NULL,
         help_text="사용자가 어떤 알림을 메인으로 받을지 저장하는 필드입니다.",
         verbose_name="메인 알림 플랫폼",
-        related_name="main_noti_platform",
+        related_name="noti_main_platform",
     )
     sub_noti_platform = models.ForeignKey(
         NotiPlatform,
+        default=None,
         blank=False,
         null=True,
         on_delete=models.SET_NULL,
         help_text="사용자가 어떤 알림을 서브로 받을지 저장하는 필드입니다.",
         verbose_name="서브 알림 플랫폼",
-        related_name="sub_noti_platform",
+        related_name="noti_sub_platform",
     )
     retry_count = models.IntegerField(
         default=0,
