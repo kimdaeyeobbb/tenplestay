@@ -34,28 +34,37 @@ async def fetch_url(session: RetryClient, url: str):
         return await response.text()
 
 
-async def fetch_all_url(result: list[dict]):
+async def fetch_all_url(scraping_urls: list[dict]):
     """`result`는 scraping_scrapingurl table model list"""
     retry_options = ExponentialRetry(attempts=3)
     async with RetryClient(retry_options=retry_options) as session:
         tasks = [
             asyncio.create_task(fetch_url(session, scraping_url["website"]))
-            for scraping_url in result
+            for scraping_url in scraping_urls
         ]
-        stats_results = await asyncio.gather(*tasks)
+        res_results = await asyncio.gather(*tasks)
 
-        # scraping_url 값으로 변화 감지
-        # scraping_url["id"]
-
-        # 그룹 & 비동기 러닝 결과 묶어서 데이터 dump to dict
-        # 여기서 fail 건 데이터 제대로 처리할 필요 있음
-        for result in stats_results:
+        # 결과 값으로 변화 감지하기
+        for scraping_url, scraping_result in zip(scraping_urls, res_results):
             try:
-                if not result:
+                if not scraping_result:
                     raise Exception("fail to request, result is empty")
-                # log.info(result)
+
+                # scraping_url["last_scraping_log"] 가 비워져있으면 최초 수집, 그냥 바로 저장 & pass
+                if not scraping_url["last_scraping_log"]:
+                    ...
+                    continue
+
+                # 변화 체크
+                ...
+
+                # 변화 있는데 키워드도 있으면 다시 체크
+                ...
+
             except Exception as e:
-                log.error(f"error >> {e}, result >> {result}")
+                log.error(
+                    f"error >> {e}, {e.__class__}, scraping_url >> {scraping_url}, scraping_result >> {scraping_result}"
+                )
                 continue
 
         return stats_results
@@ -63,8 +72,8 @@ async def fetch_all_url(result: list[dict]):
 
 async def scrapping(rep: Repository, group_id: str):
     await rep.initialize()
-    result: list[dict] = await rep.get_all_scraping_urls_by_group(group_id)
-    request_result = await fetch_all_url(result)
+    scraping_urls: list[dict] = await rep.get_all_scraping_urls_by_group(group_id)
+    request_result = await fetch_all_url(scraping_urls)
 
     # 키워드 체크 & 변화 체크 & 바뀌었으면 noti에 insert into
     await rep.close()

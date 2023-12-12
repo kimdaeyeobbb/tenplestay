@@ -20,9 +20,13 @@ class GoogleOAuthCallbackView(APIView):
     def get(self, request: Request):
         # code 값을 URL의 query string에서 추출
         if code := request.GET.get("code"):
-            print("GoogleOAuthCallbackView", code)
+            # print("GoogleOAuthCallbackView", code)
             response = self.forward_code_to_google_login_view(code)
             if response.status_code == 200:
+                tokens = response.json()
+                # return_res = Response(tokens, status=status.HTTP_200_OK)
+                # return_res.set_cookie("access_token", tokens["access"])
+                # return_res.set_cookie("refresh_token", tokens["refresh"])
                 return Response(response.json(), status=status.HTTP_200_OK)
             return Response(
                 {"error": "Failed to process with GoogleLoginView"},
@@ -47,7 +51,7 @@ class GoogleLoginView(SocialLoginView):
     client_class = OAuth2Client
 
     def post(self, request, *args, **kwargs):
-        print("GoogleLoginView", "post")
+        # print("GoogleLoginView", "post")
         return super().post(request, *args, **kwargs)
 
 
@@ -57,5 +61,5 @@ class NaverLoginView(SocialLoginView):
     client_class = OAuth2Client
 
     def post(self, request, *args, **kwargs):
-        print("NaverLoginView", "post")
+        # print("NaverLoginView", "post")
         return super().post(request, *args, **kwargs)

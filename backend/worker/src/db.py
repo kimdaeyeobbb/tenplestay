@@ -57,8 +57,20 @@ class Repository:
         except Exception as e:
             print(e)
 
-    async def create_scraping_log(self, scraping_url_id: int):
-        ...
+    async def create_scraping_log(
+        self, scraping_url_id: int, response: str, is_error: bool
+    ):
+        try:
+            sql = (
+                f"""
+                INSERT INTO scraping_scrapinglog (result, is_error, created_at, updated_at) 
+                VALUES ({response}, {is_error}, NOW(), NOW())
+            """,
+            )
+            result = await self.conn.execute(sql)
+            return result
+        except Exception as e:
+            print(e)
 
     async def close(self):
         if self.conn:
