@@ -8,10 +8,14 @@ function MainLayout({ children }: { children: React.ReactNode }) {
       <Header />
       <div className="flex flex-1">
         <Navbar />
-        <div>
-          {/* children이 여기에 렌더링됨 */}
-          {children}
-          <Footer />
+        <div className="flex flex-col  w-screen">
+          <main className="flex flex-1 bg-white">
+            {/* children이 여기에 렌더링됨 */}
+            {children}
+          </main>
+          <div>
+            <Footer />
+          </div>
         </div>
       </div>
     </div>
