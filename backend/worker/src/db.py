@@ -57,20 +57,42 @@ class Repository:
         except Exception as e:
             print(e)
 
-    async def create_scraping_log(
+    async def create_scraping_log_and_update_scraping_url(
         self, scraping_url_id: int, response: str, is_error: bool
-    ):
+    ) -> None:
         try:
-            sql = (
-                f"""
+            insert_scraping_log_sql = f"""
                 INSERT INTO scraping_scrapinglog (result, is_error, created_at, updated_at) 
-                VALUES ({response}, {is_error}, NOW(), NOW())
-            """,
-            )
-            result = await self.conn.execute(sql)
-            return result
+                VALUES ('{response}', {is_error}, NOW(), NOW())
+                RETURNING id;
+            """
+            new_scraping_log_pk: int = await self.conn.fetchval(
+                insert_scraping_log_sql
+            )  # ID값을 반환받음
+
+            update_scraping_url_sql = f"""
+                UPDATE scraping_scrapingurl
+                SET last_scraping_log = {new_scraping_log_pk}
+                WHERE id = {scraping_url_id};
+            """
+            await self.conn.execute(update_scraping_url_sql)
         except Exception as e:
             print(e)
+            return None
+
+    async def update_scrapingurl_with_log_id(self, scraping_url_id: int, log_id: int):
+        try:
+            sql = f"""
+                UPDATE scrapingurl
+                SET log_id = {log_id}
+                WHERE id = {scraping_url_id};
+            """
+            await self.conn.execute(sql)
+        except Exception as e:
+            print(e)
+
+    async def diff_check_two_scraping_log(self):
+        ...
 
     async def close(self):
         if self.conn:
