@@ -1,6 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
-import NotFound from '../pages/error/NotFound';
-import MainLayout from '../layouts/MainLayout';
+import { Route, Routes } from 'react-router-dom';
 import Landing from '../pages/landing/Landing';
 
 function CommonRouter() {
