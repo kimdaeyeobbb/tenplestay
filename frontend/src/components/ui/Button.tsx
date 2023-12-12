@@ -1,3 +1,5 @@
+import { MouseEvent } from '../../types/Events';
+
 interface ButtonProps {
   borderRadius?: string;
   borderWidth?: number;
@@ -9,7 +11,7 @@ interface ButtonProps {
   btnTxt: React.ReactNode;
   type: 'submit' | 'reset' | 'button';
   value?: string;
-  onClick: () => void;
+  onClick: (e: MouseEvent) => void;
 }
 
 const Button = ({
