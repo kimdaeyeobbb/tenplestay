@@ -23,11 +23,11 @@ class GoogleOAuthCallbackView(APIView):
             # print("GoogleOAuthCallbackView", code)
             response = self.forward_code_to_google_login_view(code)
             if response.status_code == 200:
-                tokens = response.json()
-                # return_res = Response(tokens, status=status.HTTP_200_OK)
-                # return_res.set_cookie("access_token", tokens["access"])
-                # return_res.set_cookie("refresh_token", tokens["refresh"])
-                return Response(response.json(), status=status.HTTP_200_OK)
+                tokens = response.json()["data"]
+                return_res = Response(tokens, status=status.HTTP_200_OK)
+                return_res.set_cookie("access_token", tokens["access"])
+                return_res.set_cookie("refresh_token", tokens["refresh"])
+                return return_res
             return Response(
                 {"error": "Failed to process with GoogleLoginView"},
                 status=response.status_code,
