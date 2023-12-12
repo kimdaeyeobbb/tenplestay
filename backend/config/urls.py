@@ -27,14 +27,9 @@ from utils.util_views import PingAPIView
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("ping", PingAPIView.as_view(), name="ping"),
-]
-
-
-# ==================================================================== #
-# app's API urls
-# ==================================================================== #
-
-urlpatterns += [
+    # ============================================================== #
+    # app's API urls
+    # ============================================================== #
     path("api/accounts/", include("apps.accounts.urls")),
     path("api/scraping/", include("apps.scraping.urls")),
 ]
@@ -57,23 +52,24 @@ schema_view = get_schema_view(
 )
 
 if settings.DEBUG:
+    # import mimetypes
+    # mimetypes.add_type("application/javascript", ".js", True)
+
     import debug_toolbar
 
     urlpatterns += [
-        re_path(
-            r"^swagger(?P<format>\.json|\.yaml)$",
+        path(
+            "swagger<format>/",
             schema_view.without_ui(cache_timeout=0),
             name="schema-json",
         ),
-        re_path(
-            r"^swagger/$",
+        path(
+            "swagger/",
             schema_view.with_ui("swagger", cache_timeout=0),
             name="schema-swagger-ui",
         ),
-        re_path(
-            r"^redoc/$",
-            schema_view.with_ui("redoc", cache_timeout=0),
-            name="schema-redoc",
+        path(
+            "redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
         ),
         path("__debug__/", include(debug_toolbar.urls)),
     ]

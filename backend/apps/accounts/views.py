@@ -1,4 +1,5 @@
 import requests
+
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.naver.views import NaverOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
@@ -42,7 +43,7 @@ class GoogleOAuthCallbackView(APIView):
 
 class GoogleLoginView(SocialLoginView):
     adapter_class = CustomGoogleOAuth2Adapter
-    callback_url = "http://localhost:8000/api/accounts/google/login/callback/"
+    callback_url = "http://localhost:3000"
     client_class = OAuth2Client
 
     def post(self, request, *args, **kwargs):

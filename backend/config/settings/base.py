@@ -13,6 +13,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+import nltk
 import environ
 
 # ======================================================================== #
@@ -24,7 +25,6 @@ env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False)
 )
-# environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -37,10 +37,24 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 DEBUG = env("DEBUG")
 SECRET_KEY = env("SECRET_KEY")
 
+# 방화벽 및 접근 권한, IP 세팅 & 설정
 ALLOWED_HOSTS = ["tenplestay.kro.kr", "localhost", "127.0.0.1"]
-CSRF_TRUSTED_ORIGINS = ["https://tenplestay.kro.kr"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://tenplestay.kro.kr",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
+INTERNAL_IPS = ("127.0.0.1",)
+
 
 AUTH_USER_MODEL = "accounts.User"  # for get Auth user model
+
+
+# Naver Clova Studio
+X_NCP_CLOVASTUDIO_API_KEY = env("X_NCP_CLOVASTUDIO_API_KEY")
+X_NCP_APIGW_API_KEY = env("X_NCP_APIGW_API_KEY")
+X_NCP_CLOVASTUDIO_REQUEST_ID = env("X_NCP_CLOVASTUDIO_REQUEST_ID")
+
 
 # ======================================================================== #
 # install application, third-party config
@@ -110,7 +124,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [str(BASE_DIR.joinpath("templates"))],
+        "DIRS": [],  # [str(BASE_DIR.joinpath("templates"))],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -312,3 +326,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# ==================================================================== #
+# others
+# ==================================================================== #
+
+# nltk 리소스 다운로드 - 자연어 처리
+nltk.download("punkt")
+nltk.download("stopwords")
