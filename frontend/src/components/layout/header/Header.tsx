@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { ChangeEvent } from '../../../types/Events';
 import Input from '../../ui/Input';
 
 interface ModalProps {
@@ -90,9 +89,6 @@ const Header = () => {
               labelTxt={''}
               showSearchIcon={true}
               placeholder="검색어 입력"
-              onChange={function (e: ChangeEvent): void {
-                throw new Error('Function not implemented.');
-              }}
             />
           </li>
           <li className="max-lg:border-b max-lg:py-2 px-3">

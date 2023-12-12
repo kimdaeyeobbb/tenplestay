@@ -9,7 +9,7 @@ interface InputProps {
   placeholder: string;
   error: boolean;
   showSearchIcon?: boolean;
-  onChange: (e: ChangeEvent) => void;
+  onChange?: (e: ChangeEvent) => void;
   width?: string;
   height?: string;
 }
