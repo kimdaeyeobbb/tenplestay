@@ -37,8 +37,15 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 DEBUG = env("DEBUG")
 SECRET_KEY = env("SECRET_KEY")
 
+# 방화벽 및 접근 권한, IP 세팅 & 설정
 ALLOWED_HOSTS = ["tenplestay.kro.kr", "localhost", "127.0.0.1"]
-CSRF_TRUSTED_ORIGINS = ["https://tenplestay.kro.kr", "http://localhost:8000"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://tenplestay.kro.kr",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
+INTERNAL_IPS = ("127.0.0.1",)
+
 
 AUTH_USER_MODEL = "accounts.User"  # for get Auth user model
 
@@ -117,7 +124,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [str(BASE_DIR.joinpath("templates"))],
+        "DIRS": [],  # [str(BASE_DIR.joinpath("templates"))],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

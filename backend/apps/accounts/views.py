@@ -43,7 +43,7 @@ class GoogleOAuthCallbackView(APIView):
 
 class GoogleLoginView(SocialLoginView):
     adapter_class = CustomGoogleOAuth2Adapter
-    callback_url = "http://localhost:8000/api/accounts/google/login/callback/"
+    callback_url = "http://localhost:3000"
     client_class = OAuth2Client
 
     def post(self, request, *args, **kwargs):
