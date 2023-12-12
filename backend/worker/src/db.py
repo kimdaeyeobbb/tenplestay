@@ -57,6 +57,9 @@ class Repository:
         except Exception as e:
             print(e)
 
+    async def create_scraping_log(self, scraping_url_id: int):
+        ...
+
     async def close(self):
         if self.conn:
             await self.conn.close()

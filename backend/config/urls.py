@@ -27,14 +27,10 @@ from utils.util_views import PingAPIView
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("ping", PingAPIView.as_view(), name="ping"),
-]
-
-
-# ==================================================================== #
-# app's API urls
-# ==================================================================== #
-
-urlpatterns += [
+    
+    # ============================================================== #
+    # app's API urls
+    # ============================================================== #
     path("api/accounts/", include("apps.accounts.urls")),
     path("api/scraping/", include("apps.scraping.urls")),
 ]

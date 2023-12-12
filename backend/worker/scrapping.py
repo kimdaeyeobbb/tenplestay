@@ -35,6 +35,7 @@ async def fetch_url(session: RetryClient, url: str):
 
 
 async def fetch_all_url(result: list[dict]):
+    """`result`는 scraping_scrapingurl table model list"""
     retry_options = ExponentialRetry(attempts=3)
     async with RetryClient(retry_options=retry_options) as session:
         tasks = [
@@ -43,14 +44,16 @@ async def fetch_all_url(result: list[dict]):
         ]
         stats_results = await asyncio.gather(*tasks)
 
+        # scraping_url 값으로 변화 감지
+        # scraping_url["id"]
+
         # 그룹 & 비동기 러닝 결과 묶어서 데이터 dump to dict
         # 여기서 fail 건 데이터 제대로 처리할 필요 있음
         for result in stats_results:
             try:
                 if not result:
                     raise Exception("fail to request, result is empty")
-
-                log.info(result)
+                # log.info(result)
             except Exception as e:
                 log.error(f"error >> {e}, result >> {result}")
                 continue
