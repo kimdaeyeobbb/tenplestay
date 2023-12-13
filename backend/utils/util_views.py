@@ -30,7 +30,7 @@ def log_file_reader(log_file_path):
 
 def log_view(request):
     scraping_log_file_path = (
-        "/root/tenplestay/backend/worker/logs/templestay-scraping-worker.log"
+        "/root/tenplestay/backend/worker/logs/tenplestay-scraping-worker.log"
     )
     messaging_log_file_path = (
         "/root/tenplestay/backend/worker/logs/tenplestay-messaging-worker.log"
