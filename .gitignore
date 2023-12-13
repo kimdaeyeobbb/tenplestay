@@ -1,6 +1,9 @@
 
-static/
+# custom
 
+static/
+.vscode
+.idea
 
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,visualstudiocode,python,venv,django,react,git,dotenv
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,macos,visualstudiocode,python,venv,django,react,git,dotenv
