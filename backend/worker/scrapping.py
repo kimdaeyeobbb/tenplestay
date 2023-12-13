@@ -61,7 +61,7 @@ async def scrapping(rep: Repository, group_id: str):
                 raise Exception("fail to request, result is empty")
 
             scraping_result = scraping_result.strip()
-            t = await rep.is_lastscraping_error()
+            t = await rep.is_lastscraping_error(scraping_url["id"])
             print(f"await rep.is_lastscraping_error() >> ", t)
 
             # ============================================================ #
