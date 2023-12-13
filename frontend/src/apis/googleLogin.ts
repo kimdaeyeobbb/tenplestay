@@ -6,11 +6,7 @@ export const getGoogleAuthURL = () => {
   const redirectURI = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
   const responseType = 'code';
   const scope = 'profile email'; // 필요한 권한에 따라 조절
-
   const authURL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientID}&redirect_uri=${redirectURI}&response_type=${responseType}&scope=${scope}`;
-  //   const authURL =
-  //     'https://accounts.google.com/o/oauth2/v2/auth?scope=profile%20email&client_id=822621632385-o7t27lhoa700srm5ektssvjgfa8dn28t.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A3000&response_type=code';
-
   return authURL;
 };
 
