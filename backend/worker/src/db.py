@@ -78,6 +78,17 @@ class Repository:
             update_scraping_url_sql, new_scraping_log_pk, scraping_url_id
         )
 
+    async def is_lastscraping_error(self, scraping_url_id: int):
+        sql = """
+            select ss2.is_error 
+            from scraping_scrapingurl ss 
+            inner join scraping_scrapinglog ss2 
+            on ss.last_scraping_log_id = ss2.id 
+            where ss.id = $1;
+        """
+        result = await self.conn.fetch(sql, scraping_url_id)
+        return result[0].get("is_error")
+
     async def get_scrapingurl_log(self, scraping_url_id: int) -> dict:
         sql = f"""
             select ss2.*

@@ -61,27 +61,29 @@ async def scrapping(rep: Repository, group_id: str):
                 raise Exception("fail to request, result is empty")
 
             scraping_result = scraping_result.strip()
+            t = await rep.is_lastscraping_error()
+            print(f"await rep.is_lastscraping_error() >> ", t)
 
             # ============================================================ #
             # scraping_url["last_scraping_log_id"] 가 비워져있으면 최초 수집,
             # 또는 is_error 가 True 라면 -> admin에서 확인을 해야함
             # 그냥 바로 저장 & scraping_url 의 log FK 값 update & continue
             # ============================================================ #
-            if (
-                not scraping_url["last_scraping_log_id"]
-                or scraping_url["is_error"] == True
-            ):
-                await rep.create_scraping_log_and_update_scraping_url(
-                    scraping_url["id"], scraping_result, False
-                )
-                continue
+            # if (
+            #     not scraping_url["last_scraping_log_id"]
+            #     or scraping_url["is_error"] == True
+            # ):
+            #     await rep.create_scraping_log_and_update_scraping_url(
+            #         scraping_url["id"], scraping_result, False
+            #     )
+            #     continue
 
             # ============================================================ #
             # 변화 체크, request_result 는 새로운 scraping result
             # 새로 만들 scraping_log 값과 저장된 scraping_url의 FK - scraping_log 의
             # "result" 값들을 비교
             # ============================================================ #
-            print(await rep.get_scrapingurl_log(scraping_url["id"]))
+            # print(await rep.get_scrapingurl_log(scraping_url["id"]))
             # is_diff = False
             # old_scraping_result = await rep.get_scrapingurl_log(scraping_url["id"])
             # old_scraping_result = old_scraping_result["result"]
