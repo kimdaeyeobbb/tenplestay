@@ -74,7 +74,7 @@ async def scrapping(rep: Repository, group_id: str):
             ...
 
         except Exception as e:
-            err_msg = f"error >> {e}, {e.__class__}, scraping_url >> {scraping_url}, scraping_result >> {scraping_result}"
+            err_msg = f"error >> {e}, {e.__class__}, scraping_url >> {scraping_url},"  # scraping_result >> {scraping_result}"
             log.error(err_msg)
             await rep.create_scraping_log_and_update_scraping_url(
                 scraping_url["id"], err_msg, True

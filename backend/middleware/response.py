@@ -8,7 +8,11 @@ class StandardizeApiResponseMiddleware:
     def __call__(self, request):
         response = self.get_response(request)
 
-        # drf-spectacular의 경로를 확인하고, 해당 경로에 대해서는 미들웨어의 처리를 건너뛰도록
+        # api 요청 아닌 것은 모두 skip
+        if not request.path.startswith("/api"):
+            return self.get_response(request)
+
+        # drf-spectacular의 경로를 확인하고, 해당 경로에 대해서는 skip
         if request.path.startswith("/api/schema"):
             return self.get_response(request)
 
