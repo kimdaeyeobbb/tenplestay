@@ -18,6 +18,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 
 from utils.util_views import PingAPIView
 
@@ -29,6 +34,21 @@ urlpatterns = [
     # ============================================================== #
     path("api/accounts/", include("apps.accounts.urls")),
     path("api/scraping/", include("apps.scraping.urls")),
+    # ============================================================== #
+    # API docs and third party urls
+    # ============================================================== #
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    # Optional UI
+    path(
+        "api/schema/swagger-ui/",
+        SpectacularSwaggerView.as_view(url_name="schema"),
+        name="swagger-ui",
+    ),
+    path(
+        "api/schema/redoc/",
+        SpectacularRedocView.as_view(url_name="schema"),
+        name="redoc",
+    ),
 ]
 
 
@@ -37,27 +57,9 @@ urlpatterns = [
 # ==================================================================== #
 
 if settings.DEBUG:
-    from drf_spectacular.views import (
-        SpectacularAPIView,
-        SpectacularRedocView,
-        SpectacularSwaggerView,
-    )
     import debug_toolbar
 
     urlpatterns += [
-        # YOUR PATTERNS
-        path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
-        # Optional UI
-        path(
-            "api/schema/swagger-ui/",
-            SpectacularSwaggerView.as_view(url_name="schema"),
-            name="swagger-ui",
-        ),
-        path(
-            "api/schema/redoc/",
-            SpectacularRedocView.as_view(url_name="schema"),
-            name="redoc",
-        ),
         path("__debug__/", include(debug_toolbar.urls)),
     ]
 
