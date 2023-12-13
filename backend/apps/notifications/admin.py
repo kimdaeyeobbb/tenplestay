@@ -35,7 +35,6 @@ class NotiAdmin(admin.ModelAdmin):
     @admin.display(description="Sending Status")
     def send_status(self, obj: Noti):
         return format_html(
-            "<div>{}</div>",
             '<span style="color: red;">●</span> N'
             if obj.is_send
             else '<span style="color: green;">●</span> Y',
