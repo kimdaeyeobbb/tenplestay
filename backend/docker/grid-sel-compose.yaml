@@ -11,6 +11,7 @@ services:
     depends_on:
       - selenium-hub
     environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
 
@@ -19,14 +20,16 @@ services:
     depends_on:
       - selenium-hub
     environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
-  
+
   chrome3:
     image: selenium/node-chrome:latest
     depends_on:
       - selenium-hub
     environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
 
@@ -35,6 +38,7 @@ services:
     depends_on:
       - selenium-hub
     environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
 
@@ -43,6 +47,7 @@ services:
     depends_on:
       - selenium-hub
     environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
 
@@ -51,5 +56,6 @@ services:
     depends_on:
       - selenium-hub
     environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
