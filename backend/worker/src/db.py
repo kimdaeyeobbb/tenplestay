@@ -103,9 +103,10 @@ class Repository:
     async def create_noti(self, scraping_url: dict):
         sql = """
             INSERT INTO notifications_noti 
-                (user_id, scraping_url_id, main_noti_platform_id, sub_noti_platform_id, retry_count) 
+                (user_id, scraping_url_id, main_noti_platform_id, sub_noti_platform_id, 
+                retry_count, created_at, updated_at) 
             VALUES 
-                ($1, $2, $3, $4, 0);
+                ($1, $2, $3, $4, 0, NOW(), NOW());
         """
         await self.conn.execute(
             sql,
