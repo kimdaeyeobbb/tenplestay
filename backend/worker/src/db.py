@@ -1,5 +1,6 @@
 import asyncio
 from urllib.parse import urlparse, unquote
+from typing import Union
 
 import asyncpg
 import pytz
@@ -34,7 +35,9 @@ class Repository:
         except Exception:
             return False
 
-    async def get_all_scraping_urls_by_group(self, group_id) -> list[dict]:
+    async def get_all_scraping_urls_by_group(
+        self, group_id: Union[int, str]
+    ) -> list[dict]:
         try:
             sql = f"""
                 select *
@@ -99,15 +102,15 @@ class Repository:
             await self.conn.close()
 
 
-async def main():
-    db_url = "db_url"
-    rep = Repository(db_url)
-    await rep.initialize()
-    connection_successful = await rep.test_connection()
-    print("Connection Successful:", connection_successful)
-    scraping_urls: list[dict] = await rep.get_all_scraping_urls_by_group(1)
-    print(scraping_urls)
-    await rep.close()
+# async def main():
+#     db_url = "db_url"
+#     rep = Repository(db_url)
+#     await rep.initialize()
+#     connection_successful = await rep.test_connection()
+#     print("Connection Successful:", connection_successful)
+#     scraping_urls: list[dict] = await rep.get_all_scraping_urls_by_group(1)
+#     print(scraping_urls)
+#     await rep.close()
 
 
-asyncio.run(main())
+# asyncio.run(main())

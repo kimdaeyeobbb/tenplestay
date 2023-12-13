@@ -50,36 +50,37 @@ async def scrapping(rep: Repository, group_id: str):
     await rep.initialize()
     scraping_urls: list[dict] = await rep.get_all_scraping_urls_by_group(group_id)
     request_result = await fetch_all_url(scraping_urls)
+    print(zip(scraping_urls, request_result))
 
-    # 결과 값으로 변화 감지하기
-    for scraping_url, scraping_result in zip(scraping_urls, request_result):
-        try:
-            if not scraping_result:
-                raise Exception("fail to request, result is empty")
+    # # 결과 값으로 변화 감지하기
+    # for scraping_url, scraping_result in zip(scraping_urls, request_result):
+    #     try:
+    #         if not scraping_result:
+    #             raise Exception("fail to request, result is empty")
 
-            # scraping_url["last_scraping_log"] 가 비워져있으면 최초 수집,
-            # 그냥 바로 저장 & scraping_url 의 log FK 값 update & continue
-            if not scraping_url["last_scraping_log"]:
-                await rep.create_scraping_log_and_update_scraping_url(
-                    scraping_url["id"], scraping_result, False
-                )
-                continue
+    #         # scraping_url["last_scraping_log"] 가 비워져있으면 최초 수집,
+    #         # 그냥 바로 저장 & scraping_url 의 log FK 값 update & continue
+    #         if not scraping_url["last_scraping_log"]:
+    #             await rep.create_scraping_log_and_update_scraping_url(
+    #                 scraping_url["id"], scraping_result, False
+    #             )
+    #             continue
 
-            # 변화 체크
-            # 방금 만든 scraping_log 값과 저장된 scraping_url의 FK - scraping_log 의
-            # "result" 값들을 비교
-            ...
+    #         # 변화 체크
+    #         # 방금 만든 scraping_log 값과 저장된 scraping_url의 FK - scraping_log 의
+    #         # "result" 값들을 비교
+    #         ...
 
-            # 변화 있는데 키워드도 있으면 다시 체크
-            ...
+    #         # 변화 있는데 키워드도 있으면 다시 체크
+    #         ...
 
-        except Exception as e:
-            err_msg = f"error >> {e}, {e.__class__}, scraping_url >> {scraping_url},"  # scraping_result >> {scraping_result}"
-            log.error(err_msg)
-            await rep.create_scraping_log_and_update_scraping_url(
-                scraping_url["id"], err_msg, True
-            )
-            continue
+    #     except Exception as e:
+    #         err_msg = f"error >> {e}, {e.__class__}, scraping_url >> {scraping_url},"  # scraping_result >> {scraping_result}"
+    #         log.error(err_msg)
+    #         await rep.create_scraping_log_and_update_scraping_url(
+    #             scraping_url["id"], err_msg, True
+    #         )
+    #         continue
 
     await rep.close()
 
