@@ -53,7 +53,7 @@ class Noti(BaseModel):
         help_text="알림 보내기 시도 횟수 저장하는 필드입니다.",
         verbose_name="알림 시도 횟수",
     )
-    is_error = models.BooleanField(
+    is_send = models.BooleanField(
         default=False,
         blank=False,
         null=False,

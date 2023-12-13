@@ -104,7 +104,7 @@ class Repository:
         sql = """
             INSERT INTO notifications_noti 
                 (user_id, scraping_url_id, main_noti_platform_id, sub_noti_platform_id, 
-                retry_count, is_error, created_at, updated_at) 
+                retry_count, is_send, created_at, updated_at) 
             VALUES 
                 ($1, $2, $3, $4, 0, false, NOW(), NOW());
         """
