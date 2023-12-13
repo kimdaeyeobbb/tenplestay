@@ -71,22 +71,26 @@ class Repository:
         # scrapingurl 테이블 업데이트 쿼리
         update_scraping_url_sql = """
             UPDATE scraping_scrapingurl
-            SET last_scraping_log_id = $1
+            SET last_scraping_log_id = $1, updated_at = NOW()
             WHERE id = $2;
         """
         await self.conn.execute(
             update_scraping_url_sql, new_scraping_log_pk, scraping_url_id
         )
 
-    async def update_scrapingurl_with_log_id(self, scraping_url_id: int, log_id: int):
+    async def get_scrapingurl_log(self, scraping_url_id: int) -> dict:
         sql = f"""
-            UPDATE scrapingurl
-            SET log_id = {log_id}
-            WHERE id = {scraping_url_id};
+            select ss2.*
+            from scraping_scrapingurl ss 
+            inner join scraping_scrapinglog ss2 
+            on ss.last_scraping_log_id = ss2.id 
+            where ss.id = {scraping_url_id};
         """
-        await self.conn.execute(sql)
+        result = await self.conn.fetch(sql)
+        temp = [dict(record) for record in result]
+        return temp[0]
 
-    async def diff_check_two_scraping_log(self):
+    async def create_noti(self, scraping_url: dict):
         ...
 
     async def close(self):
