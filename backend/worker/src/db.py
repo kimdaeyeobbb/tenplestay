@@ -38,61 +38,53 @@ class Repository:
     async def get_all_scraping_urls_by_group(
         self, group_id: Union[int, str]
     ) -> list[dict]:
-        try:
-            sql = f"""
-                select *
-                from scraping_scrapingurl ss 
-                where ss.scraping_group_id = {group_id}
-            """
-            result = await self.conn.fetch(sql)
-            return [dict(record) for record in result]
-        except Exception as e:
-            print(e)
+        sql = f"""
+            select *
+            from scraping_scrapingurl ss 
+            where ss.scraping_group_id = {group_id}
+        """
+        result = await self.conn.fetch(sql)
+        return [dict(record) for record in result]
 
     async def get_all_scraping_groups(self) -> list[dict]:
-        try:
-            sql = """
-                select *
-                from scraping_scrapinggroup;
-            """
-            result = await self.conn.fetch(sql)
-            return [dict(record) for record in result]
-        except Exception as e:
-            print(e)
+        sql = """
+            select *
+            from scraping_scrapinggroup;
+        """
+        result = await self.conn.fetch(sql)
+        return [dict(record) for record in result]
 
     async def create_scraping_log_and_update_scraping_url(
         self, scraping_url_id: int, response: str, is_error: bool
     ) -> None:
-        try:
-            insert_scraping_log_sql = f"""
-                INSERT INTO scraping_scrapinglog (result, is_error, created_at, updated_at) 
-                VALUES ('{response}', {is_error}, NOW(), NOW())
-                RETURNING id;
-            """
-            new_scraping_log_pk: int = await self.conn.fetchval(
-                insert_scraping_log_sql
-            )  # ID값을 반환받음
+        # 로그 데이터 삽입 쿼리
+        insert_scraping_log_sql = """
+            INSERT INTO scraping_scrapinglog (result, is_error, created_at, updated_at) 
+            VALUES ($1, $2, NOW(), NOW())
+            RETURNING id;
+        """
+        # 새 로그 ID를 반환받음
+        new_scraping_log_pk: int = await self.conn.fetchval(
+            insert_scraping_log_sql, response, is_error
+        )
 
-            update_scraping_url_sql = f"""
-                UPDATE scraping_scrapingurl
-                SET last_scraping_log = {new_scraping_log_pk}
-                WHERE id = {scraping_url_id};
-            """
-            await self.conn.execute(update_scraping_url_sql)
-        except Exception as e:
-            print(e)
-            return None
+        # scrapingurl 테이블 업데이트 쿼리
+        update_scraping_url_sql = """
+            UPDATE scraping_scrapingurl
+            SET last_scraping_log_id = $1
+            WHERE id = $2;
+        """
+        await self.conn.execute(
+            update_scraping_url_sql, new_scraping_log_pk, scraping_url_id
+        )
 
     async def update_scrapingurl_with_log_id(self, scraping_url_id: int, log_id: int):
-        try:
-            sql = f"""
-                UPDATE scrapingurl
-                SET log_id = {log_id}
-                WHERE id = {scraping_url_id};
-            """
-            await self.conn.execute(sql)
-        except Exception as e:
-            print(e)
+        sql = f"""
+            UPDATE scrapingurl
+            SET log_id = {log_id}
+            WHERE id = {scraping_url_id};
+        """
+        await self.conn.execute(sql)
 
     async def diff_check_two_scraping_log(self):
         ...
