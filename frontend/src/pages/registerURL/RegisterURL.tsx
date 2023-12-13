@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 interface ModalProps {
   closeModal: () => void;
@@ -16,18 +16,6 @@ const Modal: React.FC<ModalProps> = ({
   toggleEmail,
 }) => {
   /* 로딩스피너 */
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleRegistration = () => {
-    setIsLoading(true);
-
-    // 가상의 비동기 작업 (1초 후에 로딩 해제)
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
-    // 실제로 수행해야 할 작업을 여기에 추가하세요.
-  };
 
   /* 키워드 예외처리 */
   const [keyword, setKeyword] = useState<string>('');
