@@ -35,6 +35,11 @@ async def fetch_url(session: RetryClient, url: str):
     async with session.get(url, headers=headers) as response:
         html_content = await response.text()
         soup = BeautifulSoup(html_content, "lxml")
+
+        # Remove all script tags
+        for script_tag in soup.find_all("script"):
+            script_tag.decompose()
+
         body = soup.body
 
         if body:
