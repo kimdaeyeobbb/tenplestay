@@ -31,7 +31,7 @@ async def fetch_url(session: RetryClient, url: str):
     }
 
     async with session.get(url, headers=headers) as response:
-        return await response.text().strip()
+        return await response.text()
 
 
 async def fetch_all_url(scraping_urls: list[dict]):
@@ -60,6 +60,7 @@ async def scrapping(rep: Repository, group_id: str):
             if not scraping_result:
                 raise Exception("fail to request, result is empty")
 
+            request_result = request_result.strip()
             print(scraping_url, type(scraping_result), len(scraping_result))
 
             # scraping_url["last_scraping_log_id"] 가 비워져있으면 최초 수집,
