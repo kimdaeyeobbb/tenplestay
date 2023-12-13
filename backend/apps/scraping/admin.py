@@ -34,6 +34,9 @@ class ScrapingUrlAdmin(admin.ModelAdmin):
 
     @admin.display(description="Error Status")
     def error_status(self, obj):
+        if not obj.last_scraping_log:
+            return format_html("Never")
+
         if obj.last_scraping_log and obj.last_scraping_log.is_error:
             return format_html('<span style="color: red;">●</span> Error')
         return format_html('<span style="color: green;">●</span> No Error')

@@ -84,11 +84,11 @@ class Repository:
             from scraping_scrapingurl ss 
             inner join scraping_scrapinglog ss2 
             on ss.last_scraping_log_id = ss2.id 
-            where ss.id = {scraping_url_id};
+            where ss.id = $1;
         """
-        result = await self.conn.fetch(sql)
-        temp = [dict(record) for record in result]
-        return temp[0]
+        result = await self.conn.fetch(sql, scraping_url_id)
+        return [dict(record) for record in result]
+        # return temp[0]
 
     async def create_noti(self, scraping_url: dict):
         ...
