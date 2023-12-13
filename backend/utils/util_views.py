@@ -1,4 +1,7 @@
+import os
+
 from django.conf import settings
+from django.shortcuts import render
 from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -12,6 +15,35 @@ class PingAPIView(APIView):
 
     def get(self, requset: Request):
         return Response(status=status.HTTP_200_OK)
+
+
+def log_file_reader(log_file_path):
+    if not os.path.isfile(log_file_path):
+        return f"{log_file_path} 에 log file 이 존재하지 않거나, localhost 입니다."
+
+    # 파일의 마지막 부분 읽기 (예: 마지막 1000 바이트)
+    with open(log_file_path, "rb") as file:
+        file.seek(-1000, os.SEEK_END)  # 파일 끝에서부터 1000바이트 이전으로 이동
+        content = file.read().decode("utf-8", errors="replace")
+        return content
+
+
+def log_view(request):
+    scraping_log_file_path = (
+        "/root/templestay/backend/worker/logs/templestay-scraping-worker.log"
+    )
+    messaging_log_file_path = (
+        "/root/templestay/backend/worker/logs/tenplestay-messaging-worker.log"
+    )
+
+    return render(
+        request,
+        "log_template.html",
+        {
+            "scraping_log_content": log_file_reader(scraping_log_file_path),
+            "messaging_log_content": log_file_reader(messaging_log_file_path),
+        },
+    )
 
 
 class NClovaStudioApp:

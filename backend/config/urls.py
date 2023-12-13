@@ -24,10 +24,11 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
-from utils.util_views import PingAPIView
+from utils.util_views import PingAPIView, log_view
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("admin-custom/log/", log_view, name="log_view"),
     path("ping", PingAPIView.as_view(), name="ping"),
     # ============================================================== #
     # app's API urls
