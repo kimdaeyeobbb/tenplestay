@@ -34,8 +34,8 @@ const Modal: React.FC<ModalProps> = ({
   };
 
   /* 안내 받을 수단 선택 */
-  const checkedRadioPath = '/public/assets/images/button/radio_checked.png';
-  const uncheckedRadioPath = '/public/assets/images/button/radio_unchecked.png';
+  const checkedRadioPath = 'assets/images/button/radio_checked.png';
+  const uncheckedRadioPath = 'assets/images/button/radio_unchecked.png';
 
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
@@ -46,7 +46,7 @@ const Modal: React.FC<ModalProps> = ({
             <div className="text-2xl font-semibold">알림 받을 사이트 등록</div>
             <div className=" justify-center items-center flex">
               <button className="close" onClick={closeModal}>
-                <img src="/public/assets/images/icon/x.png" alt="Placeholder" />
+                <img src="assets/images/icon/x.png" alt="Placeholder" />
               </button>
             </div>
           </section>
