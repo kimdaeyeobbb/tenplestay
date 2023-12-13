@@ -60,7 +60,7 @@ async def scrapping(rep: Repository, group_id: str):
             if not scraping_result:
                 raise Exception("fail to request, result is empty")
 
-            request_result = request_result.strip()
+            scraping_result = scraping_result.strip()
             print(scraping_url, type(scraping_result), len(scraping_result))
 
             # scraping_url["last_scraping_log_id"] 가 비워져있으면 최초 수집,
