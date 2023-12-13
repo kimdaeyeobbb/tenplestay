@@ -50,7 +50,8 @@ async def scrapping(rep: Repository, group_id: str):
     await rep.initialize()
     scraping_urls: list[dict] = await rep.get_all_scraping_urls_by_group(group_id)
     request_result = await fetch_all_url(scraping_urls)
-    print(zip(scraping_urls, request_result))
+    for scraping_url, scraping_result in zip(scraping_urls, request_result):
+        print(scraping_url, len(scraping_result))
 
     # # 결과 값으로 변화 감지하기
     # for scraping_url, scraping_result in zip(scraping_urls, request_result):
