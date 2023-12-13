@@ -38,16 +38,19 @@ class ScrapingUrl(BaseModel):
         "ScrapingGroup",
         on_delete=models.SET_NULL,
         null=True,
+        blank=True,
     )
     user = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         null=True,
+        blank=True,
     )
     last_scraping_log = models.ForeignKey(
         "ScrapingLog",
         on_delete=models.SET_NULL,
         null=True,
+        blank=True,
     )
 
     # ================================================ #
@@ -56,7 +59,7 @@ class ScrapingUrl(BaseModel):
 
     main_noti_platform = models.ForeignKey(
         "notifications.NotiPlatform",
-        blank=False,
+        blank=True,
         null=True,
         on_delete=models.SET_NULL,
         help_text="사용자가 어떤 알림을 메인으로 받을지 저장하는 필드입니다.",
@@ -66,7 +69,7 @@ class ScrapingUrl(BaseModel):
     sub_noti_platform = models.ForeignKey(
         "notifications.NotiPlatform",
         default=None,
-        blank=False,
+        blank=True,
         null=True,
         on_delete=models.SET_NULL,
         help_text="사용자가 어떤 알림을 서브로 받을지 저장하는 필드입니다.",
