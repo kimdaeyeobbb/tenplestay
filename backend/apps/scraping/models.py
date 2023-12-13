@@ -27,6 +27,13 @@ class ScrapingUrl(BaseModel):
         help_text="정적인 HTTP 요청을 사용할지, daynamic rendering 요소까지 같이 고려할지 정하는 값입니다.",
         verbose_name="정적인 요소 여부",
     )
+    is_activate = models.BooleanField(
+        default=True,
+        blank=False,
+        null=False,
+        help_text="변동 알림을 계속 받을 것인지, 활성화 여부를 저장하는 값입니다.",
+        verbose_name="활성화 여부",
+    )
     scraping_group = models.ForeignKey(
         "ScrapingGroup",
         on_delete=models.SET_NULL,

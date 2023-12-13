@@ -4,10 +4,36 @@ from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.naver.views import NaverOAuth2Adapter
 from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-from dj_rest_auth.registration.views import SocialLoginView
+from dj_rest_auth.registration.views import SocialLoginView, LoginView
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView, status
+
+
+class DefaultLoginView(LoginView):
+    def login(self):
+        # Perform the standard login procedure and get the response
+        super().login()
+        response = super().get_response()
+
+        # Generate JWT tokens
+        refresh = RefreshToken.for_user(self.user)
+        access_token = str(refresh.access_token)
+        refresh_token = str(refresh)
+
+        # Set access and refresh tokens as cookies in the response
+        response.set_cookie(
+            "access_token",
+            access_token,
+            max_age=7 * 24 * 60 * 60,  # httponly=True
+        )
+        response.set_cookie(
+            "refresh_token",
+            refresh_token,
+            max_age=30 * 24 * 60 * 60,  # httponly=True
+        )
+        return response
 
 
 class CustomGoogleOAuth2Adapter(GoogleOAuth2Adapter):

@@ -11,13 +11,14 @@ class ScrapingUrlAdmin(admin.ModelAdmin):
         "user",
         "last_scraping_log_str",
         "error_status",
+        "activate_status",
         "scraping_group",
         "main_noti_platform",
         "sub_noti_platform",
         "created_at",
         "updated_at",
     )
-    list_filter = ("user", "scraping_group", "is_static")
+    list_filter = ("scraping_group", "is_static", "is_activate")
     search_fields = ("website", "keywords")
 
     def get_queryset(self, request):
@@ -40,6 +41,12 @@ class ScrapingUrlAdmin(admin.ModelAdmin):
         if obj.last_scraping_log and obj.last_scraping_log.is_error:
             return format_html('<span style="color: red;">●</span> Error')
         return format_html('<span style="color: green;">●</span> No Error')
+
+    @admin.display(description="Activate Status")
+    def activate_status(self, obj: ScrapingUrl):
+        if obj.is_activate:
+            return format_html('<span style="color: green;">●</span>활성상태')
+        return format_html('<span style="color: red;">●</span><b>비활성상태</b>')
 
 
 @admin.register(ScrapingLog)

@@ -42,6 +42,7 @@ class Repository:
             select *
             from scraping_scrapingurl ss 
             where ss.scraping_group_id = {group_id}
+            and ss.is_activate = true;
         """
         result = await self.conn.fetch(sql)
         return [dict(record) for record in result]

@@ -2,6 +2,7 @@ from django.urls import include, path
 
 from .views import (
     ScrapingUrlListCreateAPIView,
+    ScrapingUrlRetrieveUpdateDestroyAPIView,
     ScrapingDomainStatsAPIView,
     ScrapingUrlAPI,
 )
@@ -9,6 +10,11 @@ from .views import (
 urlpatterns = [
     path(
         "", ScrapingUrlListCreateAPIView.as_view(), name="api_scraping_url_list_create"
+    ),
+    path(
+        "detail/<int:pk>/",
+        ScrapingUrlRetrieveUpdateDestroyAPIView.as_view(),
+        name="api_scraping_url_detail",
     ),
     path(
         "stats",

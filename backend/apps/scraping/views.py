@@ -45,6 +45,20 @@ class ScrapingUrlListCreateAPIView(generics.ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+class ScrapingUrlRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = ScrapingUrl.objects.all()
+    serializer_class = ScrapingUrlSerializer
+
+    def get_queryset(self):
+        """
+        This view should return a list containing only the ScrapingUrl
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        return ScrapingUrl.objects.filter(user=user)
+
+
 class ScrapingDomainStatsAPIView(APIView):
     """`ScrapingUrl` 모델의 website 필드값 도메인 추출해서 통계"""
 
