@@ -83,7 +83,6 @@ const Header = () => {
             <Input
               type="text"
               label="search"
-              value=""
               name=""
               error={false}
               labelTxt={''}
