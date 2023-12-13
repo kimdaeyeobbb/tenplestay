@@ -1,7 +1,9 @@
 import asyncio
 import os
+import difflib
 from concurrent.futures import ProcessPoolExecutor
 
+from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from aiohttp_retry import ExponentialRetry, RetryClient
 from fake_useragent import UserAgent
@@ -31,7 +33,14 @@ async def fetch_url(session: RetryClient, url: str):
     }
 
     async with session.get(url, headers=headers) as response:
-        return await response.text()
+        html_content = await response.text()
+        soup = BeautifulSoup(html_content, "lxml")
+        body = soup.body
+
+        if body:
+            return str(body)
+        else:
+            return ""
 
 
 async def fetch_all_url(scraping_urls: list[dict]):
@@ -95,6 +104,13 @@ async def scrapping(rep: Repository, group_id: str):
 
             # 값이 달라졌다면?
             if is_diff:
+                differences = list(
+                    difflib.ndiff(old_scraping_result.split(), scraping_result.split())
+                )
+                print(
+                    f"========================= {differences} ========================="
+                )
+
                 # log 추가 생성 및 FK 변경
                 await rep.create_scraping_log_and_update_scraping_url(
                     scraping_url["id"], scraping_result, False
