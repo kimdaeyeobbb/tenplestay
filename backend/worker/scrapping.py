@@ -31,7 +31,7 @@ async def fetch_url(session: RetryClient, url: str):
     }
 
     async with session.get(url, headers=headers) as response:
-        return await response.text()
+        return await response.text().strip()
 
 
 async def fetch_all_url(scraping_urls: list[dict]):
@@ -48,6 +48,9 @@ async def fetch_all_url(scraping_urls: list[dict]):
 
 async def scrapping(rep: Repository, group_id: str):
     await rep.initialize()
+
+    log.info(f"start scraping group {group_id}")
+
     scraping_urls: list[dict] = await rep.get_all_scraping_urls_by_group(group_id)
     request_result = await fetch_all_url(scraping_urls)
 
@@ -57,7 +60,10 @@ async def scrapping(rep: Repository, group_id: str):
             if not scraping_result:
                 raise Exception("fail to request, result is empty")
 
+            print(scraping_url, type(scraping_result), len(scraping_result))
+
             # scraping_url["last_scraping_log_id"] 가 비워져있으면 최초 수집,
+            # 또는 is_error 가 True 라면
             # 그냥 바로 저장 & scraping_url 의 log FK 값 update & continue
             if not scraping_url["last_scraping_log_id"]:
                 await rep.create_scraping_log_and_update_scraping_url(
