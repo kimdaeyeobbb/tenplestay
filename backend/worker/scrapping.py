@@ -1,4 +1,5 @@
 import asyncio
+from asyncio import sleep
 import os
 import difflib
 from concurrent.futures import ProcessPoolExecutor
@@ -151,23 +152,29 @@ def run_scrapping(group_id):
 
 async def main():
     """코루틴 - 멀티프로세싱 (그룹개수만큼) 러닝 진입점"""
-    rep = Repository(DB_URL)
-    await rep.initialize()
-    connection_successful = await rep.test_connection()
-    log.info(f"Connection Successful: {connection_successful}")
+    while True:
+        try:
+            rep = Repository(DB_URL)
+            await rep.initialize()
+            connection_successful = await rep.test_connection()
+            log.info(f"Connection Successful: {connection_successful}")
 
-    # 모든 데이터 스크레핑 타겟 그룹
-    target_groups: list[dict] = await rep.get_all_scraping_groups()
-    if not target_groups:
-        log.info("empty target user")
+            # 모든 데이터 스크레핑 타겟 그룹
+            target_groups: list[dict] = await rep.get_all_scraping_groups()
+            if not target_groups:
+                log.info("empty target user")
 
-    target_groups = [group["id"] for group in target_groups]
-    await rep.close()
+            target_groups = [group["id"] for group in target_groups]
+            await rep.close()
 
-    # ProcessPoolExecutor를 사용하여 각 그룹에 대한
-    # scrapping 함수를 별도의 프로세스에서 실행 -> 그룹 개수만큼 멀티프로세싱
-    with ProcessPoolExecutor() as executor:
-        executor.map(run_scrapping, target_groups)
+            # ProcessPoolExecutor를 사용하여 각 그룹에 대한
+            # scrapping 함수를 별도의 프로세스에서 실행 -> 그룹 개수만큼 멀티프로세싱
+            with ProcessPoolExecutor() as executor:
+                executor.map(run_scrapping, target_groups)
+        except Exception as e:
+            log.error(f"main error > {e}, {e.__class__}")
+        finally:
+            await sleep(600)  # Sleep for 600 seconds (10 minutes)
 
 
 if __name__ == "__main__":

@@ -13,9 +13,18 @@ python manage.py migrate
 
 sleep 1
 gunicorn --workers 3 --bind 0.0.0.0:8000 --log-level=info --log-file=./gunicorn.log --access-logfile=./gunicorn-access.log --error-logfile=./gunicorn-error.log config.wsgi:application --daemon
-echo "==================== TenpleStay Django Application Run ===================="
-
-sleep 1
 ps -ef | grep gunicorn | grep -v grep
 
+sleep 1
+
+# 비동기 프로세스 실행
+cd ./worker
+nohup python scrapping.py > /dev/null 2>&1 &
+nohup python message.py > /dev/null 2>&1 &
+ps -ef | grep scrapping | grep -v grep
+ps -ef | grep message | grep -v grep
+
+
+cd ..
+echo "<< ==================== TenpleStay All Service Run ==================== >>"
 tail -f ./gunicorn-access.log

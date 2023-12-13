@@ -24,7 +24,7 @@ class NotiAdmin(admin.ModelAdmin):
         "created_at",
         "updated_at",
     )
-    list_filter = ("user", "is_send", "main_noti_platform", "sub_noti_platform")
+    list_filter = ("is_send", "main_noti_platform", "sub_noti_platform")
     search_fields = (
         "user__username",
         "scraping_url__id",
