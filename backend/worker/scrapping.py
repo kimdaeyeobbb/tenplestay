@@ -81,28 +81,29 @@ async def scrapping(rep: Repository, group_id: str):
             # 새로 만들 scraping_log 값과 저장된 scraping_url의 FK - scraping_log 의
             # "result" 값들을 비교
             # ============================================================ #
-            is_diff = False
-            old_scraping_result = await rep.get_scrapingurl_log(scraping_url["id"])
-            old_scraping_result = old_scraping_result["result"]
-            if old_scraping_result != scraping_result:
-                is_diff = True
+            print(await rep.get_scrapingurl_log(scraping_url["id"]))
+            # is_diff = False
+            # old_scraping_result = await rep.get_scrapingurl_log(scraping_url["id"])
+            # old_scraping_result = old_scraping_result["result"]
+            # if old_scraping_result != scraping_result:
+            #     is_diff = True
 
-            # 변화 있는데 키워드도 있으면 다시 체크
-            if scraping_url["keywords"]:
-                keyword_list = [
-                    keyword.strip() for keyword in scraping_url["keywords"].split(",")
-                ]
-                is_diff = any(keyword in scraping_result for keyword in keyword_list)
+            # # 변화 있는데 키워드도 있으면 다시 체크
+            # if scraping_url["keywords"]:
+            #     keyword_list = [
+            #         keyword.strip() for keyword in scraping_url["keywords"].split(",")
+            #     ]
+            #     is_diff = any(keyword in scraping_result for keyword in keyword_list)
 
-            # 값이 달라졌다면?
-            if is_diff:
-                # log 추가 생성 및 FK 변경
-                await rep.create_scraping_log_and_update_scraping_url(
-                    scraping_url["id"], scraping_result, False
-                )
+            # # 값이 달라졌다면?
+            # if is_diff:
+            #     # log 추가 생성 및 FK 변경
+            #     await rep.create_scraping_log_and_update_scraping_url(
+            #         scraping_url["id"], scraping_result, False
+            #     )
 
-                # 알림 추가
-                # ...
+            #     # 알림 추가
+            #     # ...
 
         except Exception as e:
             err_msg = f"error >> {e}, {e.__class__}, scraping_url >> {scraping_url},"  # scraping_result >> {scraping_result}"
