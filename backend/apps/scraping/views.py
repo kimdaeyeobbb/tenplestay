@@ -75,6 +75,10 @@ class ScrapingUrlAPI(APIView):
             finally:
                 text_html = html.get_text()
 
+                # 빈 문자열인지 체크
+                if len(text_html) < 10:
+                    return Response({"messages": "너무 짧은 문자열을 받았습니다."}, status=400)
+
                 # 네이버 클라우드
                 nstudio = NClovaStudioApp()
                 summ = nstudio.get_summarization(text_html)
