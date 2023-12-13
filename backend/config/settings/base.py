@@ -73,7 +73,8 @@ INSTALLED_APPS = [
     # ============ #
     "corsheaders",  # cors, django-cors-headers
     "debug_toolbar",  # debug (side tool bar), django-debug-toolbar
-    "drf_yasg",  # swagger, drf_yasg
+    # "drf_yasg",  # swagger, drf_yasg
+    "drf_spectacular",  # https://github.com/tfranzel/drf-spectacular
     "rest_framework",  # djangorestframework
     # ============ #
     # user auth & OAuth
@@ -124,7 +125,10 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],  # [str(BASE_DIR.joinpath("templates"))],
+        "DIRS": [
+            str(BASE_DIR),
+            str(BASE_DIR.joinpath("templates")),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -183,7 +187,19 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": DEFAULT_PAGE_SIZE,
     "DEFAULT_PAGINATION_CLASS": "utils.paginations.CustomPagination",
     # "EXCEPTION_HANDLER": "utils.exceptions.custom_exception_handler",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
+
+# https://github.com/tfranzel/drf-spectacular
+# https://drf-spectacular.readthedocs.io/en/latest/settings.html
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Tenplestay RESTFul API Docs",
+    "DESCRIPTION": "Tenplestay RESTFul API Docs from https://github.com/potenday-project/tenplestay",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    # OTHER SETTINGS
+}
+
 
 # https://docs.djangoproject.com/en/4.2/topics/email/#email-backends
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

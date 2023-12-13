@@ -8,6 +8,10 @@ class StandardizeApiResponseMiddleware:
     def __call__(self, request):
         response = self.get_response(request)
 
+        # drf-spectacular의 경로를 확인하고, 해당 경로에 대해서는 미들웨어의 처리를 건너뛰도록
+        if request.path.startswith("/api/schema"):
+            return self.get_response(request)
+
         # 여기서 response 형태를 표준화합니다.
         if isinstance(response, Response):
             # 표준 응답 형식 정의

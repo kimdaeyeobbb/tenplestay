@@ -17,10 +17,7 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path, re_path
-from drf_yasg import openapi
-from drf_yasg.views import get_schema_view
-from rest_framework.permissions import AllowAny
+from django.urls import include, path
 
 from utils.util_views import PingAPIView
 
@@ -38,38 +35,28 @@ urlpatterns = [
 # ==================================================================== #
 # DEBUG 일때만 swagger, URL patterns 추가해서 사용
 # ==================================================================== #
-schema_view = get_schema_view(
-    openapi.Info(
-        title="Tenplestay rest API Docs",
-        default_version="v1.0.0",
-        description="Tenplestay rest API Docs",
-        terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(name="Nuung", email="hyeon.woo.dev@gmail.com"),
-        license=openapi.License(name="Private License"),
-    ),
-    public=True,  # False 여야하고, permission_classes 세팅 필요
-    permission_classes=(AllowAny,),
-)
 
 if settings.DEBUG:
-    # import mimetypes
-    # mimetypes.add_type("application/javascript", ".js", True)
-
+    from drf_spectacular.views import (
+        SpectacularAPIView,
+        SpectacularRedocView,
+        SpectacularSwaggerView,
+    )
     import debug_toolbar
 
     urlpatterns += [
+        # YOUR PATTERNS
+        path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+        # Optional UI
         path(
-            "swagger<format>/",
-            schema_view.without_ui(cache_timeout=0),
-            name="schema-json",
+            "api/schema/swagger-ui/",
+            SpectacularSwaggerView.as_view(url_name="schema"),
+            name="swagger-ui",
         ),
         path(
-            "swagger/",
-            schema_view.with_ui("swagger", cache_timeout=0),
-            name="schema-swagger-ui",
-        ),
-        path(
-            "redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
+            "api/schema/redoc/",
+            SpectacularRedocView.as_view(url_name="schema"),
+            name="redoc",
         ),
         path("__debug__/", include(debug_toolbar.urls)),
     ]
