@@ -23,7 +23,8 @@ class GoogleOAuthCallbackView(APIView):
             # print("GoogleOAuthCallbackView", code)
             response = self.forward_code_to_google_login_view(code)
             if response.status_code == 200:
-                tokens = response.json()["data"]
+                tokens = response.json()
+                tokens = tokens["data"]
                 return_res = Response(tokens, status=status.HTTP_200_OK)
                 return_res.set_cookie("access_token", tokens["access"])
                 return_res.set_cookie("refresh_token", tokens["refresh"])
@@ -38,7 +39,7 @@ class GoogleOAuthCallbackView(APIView):
         )
 
     def forward_code_to_google_login_view(self, code: str):
-        url = "http://localhost:8000/api/accounts/google/login/"
+        url = "https://tenplestay.kro.kr/api/accounts/google/login/"
         payload = {"code": code}
         headers = {"Content-Type": "application/json"}
         response = requests.post(url, json=payload, headers=headers)
@@ -47,7 +48,7 @@ class GoogleOAuthCallbackView(APIView):
 
 class GoogleLoginView(SocialLoginView):
     adapter_class = CustomGoogleOAuth2Adapter
-    callback_url = "http://localhost:3000"
+    callback_url = "https://tenplestay.kro.kr/landing"
     client_class = OAuth2Client
 
     def post(self, request, *args, **kwargs):
