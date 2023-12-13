@@ -19,8 +19,7 @@ if not DB_URL:
 
 
 async def fetch_url(session: RetryClient, url: str):
-    # 랜덤 사용자 에이전트 생성
-    user_agent = UserAgent()
+    user_agent = UserAgent()  # 랜덤 사용자 에이전트 생성
     headers = {
         "User-Agent": user_agent.random,
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
@@ -41,7 +40,6 @@ async def fetch_url(session: RetryClient, url: str):
             script_tag.decompose()
 
         body = soup.body
-
         if body:
             return str(body)
         else:
@@ -109,12 +107,12 @@ async def scrapping(rep: Repository, group_id: str):
 
             # 값이 달라졌다면?
             if is_diff:
-                differences = list(
-                    difflib.ndiff(old_scraping_result.split(), scraping_result.split())
-                )
-                print(
-                    f"========================= {differences} ========================="
-                )
+                # differences = list(
+                #     difflib.ndiff(old_scraping_result.split(), scraping_result.split())
+                # )
+                # print(
+                #     f"========================= {differences} ========================="
+                # )
 
                 # log 추가 생성 및 FK 변경
                 await rep.create_scraping_log_and_update_scraping_url(
@@ -122,7 +120,7 @@ async def scrapping(rep: Repository, group_id: str):
                 )
 
                 # 알림 추가
-                # ...
+                await rep.create_noti(scraping_url)
 
         except Exception as e:
             err_msg = f"error >> {e}, {e.__class__}, scraping_url >> {scraping_url},"  # scraping_result >> {scraping_result}"

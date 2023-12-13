@@ -101,7 +101,19 @@ class Repository:
         return dict(result[0])
 
     async def create_noti(self, scraping_url: dict):
-        ...
+        sql = """
+            INSERT INTO notifications_noti 
+                (user_id, scraping_url_id, main_noti_platform_id, sub_noti_platform_id, retry_count) 
+            VALUES 
+                ($1, $2, $3, $4, 0);
+        """
+        await self.conn.execute(
+            sql,
+            scraping_url["user_id"],
+            scraping_url["id"],
+            scraping_url["main_noti_platform_id"],
+            scraping_url["sub_noti_platform_id"],
+        )
 
     async def close(self):
         if self.conn:
