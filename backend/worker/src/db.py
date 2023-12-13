@@ -98,8 +98,7 @@ class Repository:
             where ss.id = $1;
         """
         result = await self.conn.fetch(sql, scraping_url_id)
-        return [dict(record) for record in result]
-        # return temp[0]
+        return dict(result[0])
 
     async def create_noti(self, scraping_url: dict):
         ...
