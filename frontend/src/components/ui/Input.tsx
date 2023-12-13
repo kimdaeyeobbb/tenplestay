@@ -4,12 +4,12 @@ interface InputProps {
   type: 'text' | 'number' | 'email' | 'password';
   label: string;
   labelTxt: string;
-  value: string | number;
+  value?: string | number;
   name: string;
   placeholder: string;
   error: boolean;
   showSearchIcon?: boolean;
-  onChange: (e: ChangeEvent) => void;
+  onChange?: (e: ChangeEvent) => void;
   width?: string;
   height?: string;
 }
