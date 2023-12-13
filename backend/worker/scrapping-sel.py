@@ -1,9 +1,13 @@
 import os
 import difflib
+import random
 import asyncio
 from asyncio import sleep
 from concurrent.futures import ProcessPoolExecutor
 
+from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from aiohttp_retry import ExponentialRetry, RetryClient
@@ -19,21 +23,27 @@ if not DB_URL:
     raise Exception("There is no DB_URL value in env value")
 
 
-async def fetch_url(session: RetryClient, url: str):
+async def fetch_url(url: str):
     user_agent = UserAgent()  # 랜덤 사용자 에이전트 생성
-    headers = {
-        "User-Agent": user_agent.random,
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Accept-Encoding": "gzip, deflate, br",
-        "DNT": "1",  # Do Not Track Request Header
-        "Connection": "keep-alive",
-        "Upgrade-Insecure-Requests": "1",
-        "Cache-Control": "max-age=0",
-    }
+    # Chrome 옵션 설정
+    chrome_options = ChromeOptions()
+    chrome_options.add_argument("--headless")  # 브라우저를 머리 없이 실행
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument(f"user-agent={user_agent.random}")
 
-    async with session.get(url, headers=headers) as response:
-        html_content = await response.text()
+    # Selenium WebDriver 설정
+    browsers = [DesiredCapabilities.CHROME, DesiredCapabilities.FIREFOX]
+    selected_browser = random.choice(browsers)
+    driver = webdriver.Remote(
+        command_executor="http://localhost:4444/wd/hub",
+        desired_capabilities=selected_browser,
+        options=chrome_options,
+    )
+
+    try:
+        driver.get(url)
+        html_content = driver.page_source
         soup = BeautifulSoup(html_content, "lxml")
 
         # Remove all script tags
@@ -45,6 +55,10 @@ async def fetch_url(session: RetryClient, url: str):
             return str(body)
         else:
             return ""
+
+    finally:
+        # WebDriver 종료
+        driver.quit()
 
 
 async def fetch_all_url(scraping_urls: list[dict]):
