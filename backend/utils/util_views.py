@@ -23,7 +23,12 @@ def log_file_reader(log_file_path):
 
     # 파일의 마지막 부분 읽기 (예: 마지막 1000 바이트)
     with open(log_file_path, "rb") as file:
-        file.seek(-1000, os.SEEK_END)  # 파일 끝에서부터 1000바이트 이전으로 이동
+        file.seek(0, os.SEEK_END)  # 파일의 끝으로 이동
+        file_size = file.tell()  # 현재 위치를 얻어 파일의 크기 확인
+
+        seek_position = -min(1000, file_size)  # 파일 크기와 1000바이트 중 작은 값만큼 뒤로 이동
+        file.seek(seek_position, os.SEEK_END)  # 뒤로 이동
+
         content = file.read().decode("utf-8", errors="replace")
         return content
 
