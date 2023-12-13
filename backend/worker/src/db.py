@@ -104,9 +104,9 @@ class Repository:
         sql = """
             INSERT INTO notifications_noti 
                 (user_id, scraping_url_id, main_noti_platform_id, sub_noti_platform_id, 
-                retry_count, created_at, updated_at) 
+                retry_count, is_error, created_at, updated_at) 
             VALUES 
-                ($1, $2, $3, $4, 0, NOW(), NOW());
+                ($1, $2, $3, $4, 0, false, NOW(), NOW());
         """
         await self.conn.execute(
             sql,
