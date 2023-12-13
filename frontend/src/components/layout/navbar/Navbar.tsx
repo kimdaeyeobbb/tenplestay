@@ -37,7 +37,7 @@ const Navbar = () => {
         }`}
       >
         <img
-          src={`src/assets/images/icon/${
+          src={`public/assets/images/icon/${
             hoveredItems[index] ? 'link_white' : 'link_gray'
           }.png`}
           alt="링크 이미지"
