@@ -61,12 +61,14 @@ async def scrapping(rep: Repository, group_id: str):
                 raise Exception("fail to request, result is empty")
 
             scraping_result = scraping_result.strip()
-            print(scraping_url, type(scraping_result), len(scraping_result))
 
             # scraping_url["last_scraping_log_id"] 가 비워져있으면 최초 수집,
-            # 또는 is_error 가 True 라면
+            # 또는 is_error 가 True 라면 -> admin에서 확인을 해야함
             # 그냥 바로 저장 & scraping_url 의 log FK 값 update & continue
-            if not scraping_url["last_scraping_log_id"]:
+            if (
+                not scraping_url["last_scraping_log_id"]
+                or scraping_url["is_error"] == True
+            ):
                 await rep.create_scraping_log_and_update_scraping_url(
                     scraping_url["id"], scraping_result, False
                 )

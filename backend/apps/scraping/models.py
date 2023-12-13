@@ -89,7 +89,7 @@ class ScrapingLog(BaseModel):
     )
 
     def __str__(self) -> str:
-        return f"스크래이핑 결과: {self.is_error}, {self.result[:20]}"
+        return f"{self.result[:40]}"
 
 
 class ScrapingGroup(BaseModel):
