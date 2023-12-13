@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 
 from .models import NotiPlatform, Noti
 
@@ -16,6 +17,7 @@ class NotiAdmin(admin.ModelAdmin):
         "id",
         "user",
         "scraping_url",
+        "send_status",
         "main_noti_platform",
         "sub_noti_platform",
         "retry_count",
@@ -29,3 +31,12 @@ class NotiAdmin(admin.ModelAdmin):
         "main_noti_platform__platform_num",
         "sub_noti_platform__platform_num",
     )
+
+    @admin.display(description="Sending Status")
+    def send_status(self, obj: Noti):
+        return format_html(
+            "<div>{}</div>",
+            '<span style="color: red;">●</span> N'
+            if obj.is_send
+            else '<span style="color: green;">●</span> Y',
+        )

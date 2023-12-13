@@ -26,14 +26,14 @@ class ScrapingUrlAdmin(admin.ModelAdmin):
         return queryset
 
     @admin.display(description="Scraping Status")
-    def last_scraping_log_str(self, obj):
+    def last_scraping_log_str(self, obj: ScrapingUrl):
         return format_html(
             "<div>{}</div>",
             obj.last_scraping_log.__str__() if obj.last_scraping_log else "-",
         )
 
     @admin.display(description="Error Status")
-    def error_status(self, obj):
+    def error_status(self, obj: ScrapingUrl):
         if not obj.last_scraping_log:
             return format_html("Never")
 
@@ -49,11 +49,11 @@ class ScrapingLogAdmin(admin.ModelAdmin):
     search_fields = ("result",)
 
     @admin.display(description="Scraping Result")
-    def result_str(self, obj):
+    def result_str(self, obj: ScrapingLog):
         return format_html("<div>{}</div>", obj.__str__())
 
     @admin.display(description="Error Status")
-    def error_status(self, obj):
+    def error_status(self, obj: ScrapingLog):
         if obj.is_error:
             return format_html('<span style="color: red;">●</span> Error')
         return format_html('<span style="color: green;">●</span> No Error')
