@@ -2,6 +2,7 @@ import requests
 
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.naver.views import NaverOAuth2Adapter
+from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
 from rest_framework.request import Request
@@ -26,8 +27,12 @@ class GoogleOAuthCallbackView(APIView):
                 tokens = response.json()
                 tokens = tokens["data"]
                 return_res = Response(tokens, status=status.HTTP_200_OK)
-                return_res.set_cookie("access_token", tokens["access"])
-                return_res.set_cookie("refresh_token", tokens["refresh"])
+                return_res.set_cookie(
+                    "access_token", tokens["access"], max_age=7 * 24 * 60 * 60
+                )
+                return_res.set_cookie(
+                    "refresh_token", tokens["refresh"], max_age=30 * 24 * 60 * 60
+                )
                 return return_res
             return Response(
                 {"error": "Failed to process with GoogleLoginView"},
@@ -52,15 +57,22 @@ class GoogleLoginView(SocialLoginView):
     client_class = OAuth2Client
 
     def post(self, request, *args, **kwargs):
-        # print("GoogleLoginView", "post")
         return super().post(request, *args, **kwargs)
 
 
 class NaverLoginView(SocialLoginView):
     adapter_class = NaverOAuth2Adapter
-    callback_url = "http://localhost:5500/callback.html"
+    callback_url = "https://tenplestay.kro.kr/landing"
     client_class = OAuth2Client
 
     def post(self, request, *args, **kwargs):
-        # print("NaverLoginView", "post")
+        return super().post(request, *args, **kwargs)
+
+
+class KakaoLoginView(SocialLoginView):
+    adapter_class = KakaoOAuth2Adapter
+    callback_url = "https://tenplestay.kro.kr/landing"
+    client_class = OAuth2Client
+
+    def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
