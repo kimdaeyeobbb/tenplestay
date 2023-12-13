@@ -99,13 +99,15 @@ class Repository:
             await self.conn.close()
 
 
-# async def main():
-#     db_url = "db_url"
-#     repo = Repository(db_url)
-#     await repo.initialize()
-#     connection_successful = await repo.test_connection()
-#     print("Connection Successful:", connection_successful)
-#     await repo.close()
+async def main():
+    db_url = "db_url"
+    rep = Repository(db_url)
+    await rep.initialize()
+    connection_successful = await rep.test_connection()
+    print("Connection Successful:", connection_successful)
+    scraping_urls: list[dict] = await rep.get_all_scraping_urls_by_group(1)
+    print(scraping_urls)
+    await rep.close()
 
 
-# asyncio.run(main())
+asyncio.run(main())
