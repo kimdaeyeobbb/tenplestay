@@ -85,6 +85,21 @@ class MessagingModule:
                 error=e.message,
             )
 
+    def get_sms_template(self, website: str) -> str:
+        msg = f"""
+            제출하신 {website} 에서 변화가 감지되었습니다.
+            지금 들어가서 확인하세요!
+        """
+        return msg
+
+    def get_email_template(self, website: str) -> str:
+        html_content = f"""
+            <strong>공지드롭에서</strong> 제출하신 {website} 에서 변화가 감지되었습니다. <br />
+            지금 들어가서 확인하세요! <br />
+            <button><a href="{website}">확인하러가기</a></button>
+        """
+        return html_content
+
 
 if __name__ == "__main__":
     mm = MessagingModule()
