@@ -50,12 +50,6 @@ INTERNAL_IPS = ("127.0.0.1",)
 AUTH_USER_MODEL = "accounts.User"  # for get Auth user model
 
 
-# Naver Clova Studio
-X_NCP_CLOVASTUDIO_API_KEY = env("X_NCP_CLOVASTUDIO_API_KEY")
-X_NCP_APIGW_API_KEY = env("X_NCP_APIGW_API_KEY")
-X_NCP_CLOVASTUDIO_REQUEST_ID = env("X_NCP_CLOVASTUDIO_REQUEST_ID")
-
-
 # ======================================================================== #
 # install application, third-party config
 # ======================================================================== #
@@ -182,7 +176,8 @@ REST_FRAMEWORK = {
         # 기타 파서들...
     ),
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        # "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "utils.token_auth.CustomJWTAuthentication",
     ),
     "PAGE_SIZE": DEFAULT_PAGE_SIZE,
     "DEFAULT_PAGINATION_CLASS": "utils.paginations.CustomPagination",
@@ -351,3 +346,15 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # nltk 리소스 다운로드 - 자연어 처리
 nltk.download("punkt")
 nltk.download("stopwords")
+
+# Naver Clova Studio
+X_NCP_CLOVASTUDIO_API_KEY = env("X_NCP_CLOVASTUDIO_API_KEY")
+X_NCP_APIGW_API_KEY = env("X_NCP_APIGW_API_KEY")
+X_NCP_CLOVASTUDIO_REQUEST_ID = env("X_NCP_CLOVASTUDIO_REQUEST_ID")
+
+# send grid (email) & twilio (sms)
+SMS_ACCOUNT_ID = env("SMS_ACCOUNT_ID")
+SMS_AUTH_TOKEN = env("SMS_AUTH_TOKEN")
+SMS_FROM_NUM = env("SMS_FROM_NUM", default="+12057516527")
+EMAIL_API_KEY = env("EMAIL_API_KEY")
+EMAIL_FROM_EMAIL = env("EMAIL_FROM_EMAIL", default="hyeon.wo.dev@tenplestay.kro.kr")

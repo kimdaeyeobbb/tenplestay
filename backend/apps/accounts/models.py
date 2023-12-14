@@ -56,3 +56,5 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         app_label = "accounts"
+        verbose_name = "사용자"
+        verbose_name_plural = "사용자"

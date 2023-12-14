@@ -81,6 +81,7 @@ class ScrapingUrl(BaseModel):
         indexes = [
             models.Index(fields=["user", "website"], name="user_website_idx"),
         ]
+        verbose_name = "스크레이핑URL"
 
 
 class ScrapingLog(BaseModel):
@@ -101,6 +102,9 @@ class ScrapingLog(BaseModel):
     def __str__(self) -> str:
         return f"{self.result[:40]}"
 
+    class Meta:
+        verbose_name = verbose_name_plural = "스크레이핑이력"
+
 
 class ScrapingGroup(BaseModel):
     group_name = models.CharField(
@@ -120,3 +124,6 @@ class ScrapingGroup(BaseModel):
 
     def __str__(self) -> str:
         return f"스크래이핑 그룹: {self.group_name}"
+
+    class Meta:
+        verbose_name = verbose_name_plural = "스크레이핑그룹"

@@ -26,12 +26,12 @@ class DefaultLoginView(LoginView):
         response.set_cookie(
             "access_token",
             access_token,
-            max_age=7 * 24 * 60 * 60,  # httponly=True
+            max_age=7 * 24 * 60 * 60,  # httponly=False
         )
         response.set_cookie(
             "refresh_token",
             refresh_token,
-            max_age=30 * 24 * 60 * 60,  # httponly=True
+            max_age=30 * 24 * 60 * 60,  # httponly=False
         )
         return response
 

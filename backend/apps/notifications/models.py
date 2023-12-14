@@ -60,3 +60,23 @@ class Noti(BaseModel):
         help_text="알림 보내기 완료 여부를 저장하는 필드입니다.",
         verbose_name="알림 전송 여부",
     )
+
+    class Meta:
+        verbose_name = verbose_name_plural = "알림"
+
+
+class NotiSendLog(BaseModel):
+    noti = models.ForeignKey(
+        Noti,
+        on_delete=models.CASCADE,
+    )
+    result = models.JSONField(
+        default=False,
+        blank=True,
+        null=True,
+        help_text="메시징 모듈을 통해 전송 시도한 결과값을 저장하는 필드입니다.",
+        verbose_name="메시징 모듈 호출 결과",
+    )
+
+    class Meta:
+        verbose_name = verbose_name_plural = "알림 전송 이력"

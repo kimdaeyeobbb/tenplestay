@@ -35,6 +35,9 @@ langdetect = "^1.0.9"
 drf-spectacular = "^0.27.0"
 selenium = "^4.16.0"
 webdriver-manager = "^4.0.1"
+psutil = "^5.9.6"
+twilio = "^8.10.3"
+sendgrid = "^6.11.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.9.1"

@@ -1,8 +1,33 @@
 {% extends "admin/index.html" %}
 {% block content %}
-<h1>Custom Links</h1>
-<ul>
-    <li><a href="{% url 'log_view' %}">Log Viewer</a></li>
-</ul>
+<style>
+    #adminCustomLinkWarpper {
+        display: flex;
+        align-items: center;
+        margin: 10px;
+    }
+    #adminCustomLinkWarpper h1 {
+        margin: 0;
+        margin-right: 10px;
+    }
+    #adminCustomLinkWarpper ul {
+        display: flex;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+    }
+    #adminCustomLinkWarpper ul li {
+        list-style: none;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+</style>
+<div id="adminCustomLinkWarpper">
+    <h1>Custom Links</h1>
+    <ul>
+        <li><a href="{% url 'log_view' %}">Log Viewer</a></li>
+        <li><a href="{% url 'api_ping' %}">Process Status Check</a></li>
+    </ul>
+</div>
 {{ block.super }}
 {% endblock %}

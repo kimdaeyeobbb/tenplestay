@@ -1,38 +1,27 @@
-import os
-
 from django.conf import settings
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView, status
 
 from utils.retry_session import get_retry_session
+from utils.utils import is_process_running, log_file_reader
 
 
 class PingAPIView(APIView):
-    permission_classes = [IsAdminUser]
-
     def get(self, requset: Request):
-        return Response(status=status.HTTP_200_OK)
+        scraping_process_status = is_process_running("scraping.py")
+        messaging_process_status = is_process_running("messaging.py")
+        res = dict(
+            scraping_process_statu=scraping_process_status,
+            messaging_process_status=messaging_process_status,
+        )
+        return Response(status=status.HTTP_200_OK, data=res)
 
 
-def log_file_reader(log_file_path):
-    if not os.path.isfile(log_file_path):
-        return f"{log_file_path} 에 log file 이 존재하지 않거나, localhost 입니다."
-
-    # 파일의 마지막 부분 읽기 (예: 마지막 1000 바이트)
-    with open(log_file_path, "rb") as file:
-        file.seek(0, os.SEEK_END)  # 파일의 끝으로 이동
-        file_size = file.tell()  # 현재 위치를 얻어 파일의 크기 확인
-
-        seek_position = -min(1000, file_size)  # 파일 크기와 1000바이트 중 작은 값만큼 뒤로 이동
-        file.seek(seek_position, os.SEEK_END)  # 뒤로 이동
-
-        content = file.read().decode("utf-8", errors="replace")
-        return content
-
-
+@login_required
 def log_view(request):
     scraping_log_file_path = (
         "/root/tenplestay/backend/worker/logs/tenplestay-scraping-worker.log"
