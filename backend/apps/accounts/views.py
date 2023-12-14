@@ -12,6 +12,13 @@ from rest_framework.views import APIView, status
 
 
 class DefaultLoginView(LoginView):
+    
+    def post(self, request, *args, **kwargs):
+        self.request = request
+        self.serializer = self.get_serializer(data=self.request.data)
+        self.serializer.is_valid(raise_exception=True)
+        return self.login()
+    
     def login(self):
         # Perform the standard login procedure and get the response
         super().login()
