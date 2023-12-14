@@ -1,7 +1,7 @@
 import os
 import asyncio
 import sys
-import json
+# import json
 from asyncio import sleep
 
 from dotenv import load_dotenv
@@ -51,8 +51,8 @@ async def send_noti(message_moduel: MessagingModule, noti_with_scraping: dict):
     ]
     if main_platform == "email":
         html_content = f"""
-            <strong>공지드롭에서</strong> 제출하신 {noti_with_scraping["website"]} 에서 변화가 감지되었습니다. \n
-            지금 들어가서 확인하세요! \n
+            <strong>공지드롭에서</strong> 제출하신 {noti_with_scraping["website"]} 에서 변화가 감지되었습니다. <br />
+            지금 들어가서 확인하세요! <br />
             <button><a href="{noti_with_scraping["website"]}">확인하러가기</a></button>
         """
         result = message_moduel.send_email(noti_with_scraping["email"], html_content)
@@ -90,9 +90,7 @@ async def main():
         ):
             noti_with_scraping: dict
             noti_result: dict
-            bulk_send_log_data.append(
-                (noti_with_scraping["id"], json.dumps(noti_result))
-            )
+            bulk_send_log_data.append((noti_with_scraping["id"], noti_result))
             await rep.update_noti_clear(noti_with_scraping["id"])
 
         # bulk insert query 본체

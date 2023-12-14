@@ -52,7 +52,6 @@ class MessagingModule:
             error_code=message.error_code,
             price_unit=message.price_unit,
             api_version=message.api_version,
-            _context=message._context,
             date_updated=(
                 message.date_updated.isoformat() if message.date_updated else None
             ),
