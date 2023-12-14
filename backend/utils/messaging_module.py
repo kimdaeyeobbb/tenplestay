@@ -72,16 +72,16 @@ class MessagingModule:
             sg = SendGridAPIClient(self.email_api_key)
             response = sg.send(message)
             return dict(
-                status_code=response.status_code,
-                body=response.body,
-                headers=response.headers,
+                status_code=str(response.status_code),
+                body=str(response.body),
+                headers=str(response.headers),
                 error=None,
             )
         except Exception as e:
             return dict(
-                status_code=response.status_code,
-                body=response.body,
-                headers=response.headers,
+                status_code=str(response.status_code),
+                body=str(response.body),
+                headers=str(response.headers),
                 error=e.message,
             )
 
