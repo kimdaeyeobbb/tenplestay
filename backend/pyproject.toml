@@ -38,6 +38,8 @@ webdriver-manager = "^4.0.1"
 psutil = "^5.9.6"
 twilio = "^8.10.3"
 sendgrid = "^6.11.0"
+django-phonenumber-field = "^7.2.0"
+phonenumbers = "^8.13.26"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.9.1"

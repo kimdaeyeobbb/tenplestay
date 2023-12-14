@@ -1,7 +1,3 @@
-import json
-
-from django.conf import settings
-
 import twilio
 from twilio.rest import Client
 from sendgrid import SendGridAPIClient
@@ -9,7 +5,19 @@ from sendgrid.helpers.mail import Mail
 
 
 class MessagingModule:
-    def __init__(self) -> None:
+    def __init__(self, run_time: str = "django", settings: dict = {}) -> None:
+        if run_time == "django":
+            self._django_env()
+        else:
+            self.sms_account_sid = settings.get("SMS_ACCOUNT_ID")
+            self.sms_auth_token = settings.get("SMS_AUTH_TOKEN")
+            self.sms_from_num = settings.get("SMS_FROM_NUM")
+            self.email_api_key = settings.get("EMAIL_API_KEY")
+            self.email_from_mail = settings.get("EMAIL_FROM_EMAIL")
+
+    def _django_env(self) -> None:
+        from django.conf import settings
+
         self.sms_account_sid = settings["SMS_ACCOUNT_ID"]
         self.sms_auth_token = settings["SMS_AUTH_TOKEN"]
         self.sms_from_num = settings["SMS_FROM_NUM"]

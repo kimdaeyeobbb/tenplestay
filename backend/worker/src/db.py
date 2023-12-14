@@ -116,6 +116,9 @@ class Repository:
             scraping_url["main_noti_platform_id"],
             scraping_url["sub_noti_platform_id"],
         )
+    
+    async def get_all_noti_with_scarping_url(self):
+        ...
 
     async def close(self):
         if self.conn:

@@ -1,5 +1,6 @@
 from django.core.validators import RegexValidator
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.accounts.models import User
 from utils.base_modle import BaseModel
@@ -75,6 +76,12 @@ class ScrapingUrl(BaseModel):
         help_text="사용자가 어떤 알림을 서브로 받을지 저장하는 필드입니다.",
         verbose_name="서브 알림 플랫폼",
         related_name="scraping_sub_platform",
+    )
+    phone_number = PhoneNumberField(
+        verbose_name="알림 수신 번호",
+        help_text="알림을 수신할 휴대폰 번호입니다. 문자에서만 활용됩니다.",
+        blank=True,
+        null=True,
     )
 
     class Meta:

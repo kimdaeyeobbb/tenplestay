@@ -71,7 +71,6 @@ class NotiSendLog(BaseModel):
         on_delete=models.CASCADE,
     )
     result = models.JSONField(
-        default=False,
         blank=True,
         null=True,
         help_text="메시징 모듈을 통해 전송 시도한 결과값을 저장하는 필드입니다.",

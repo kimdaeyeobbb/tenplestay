@@ -15,6 +15,7 @@ class ScrapingUrlAdmin(admin.ModelAdmin):
         "scraping_group",
         "main_noti_platform",
         "sub_noti_platform",
+        "phone_number",
         "created_at",
         "updated_at",
     )

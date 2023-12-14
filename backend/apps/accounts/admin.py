@@ -9,6 +9,7 @@ class UserAdmin(DefaultUserAdmin):
     list_display = (
         "email",
         "name",
+        "phone_number",
         "is_active",
         "is_staff",
         "is_superuser",

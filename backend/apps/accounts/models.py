@@ -2,6 +2,8 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
+from phonenumber_field.modelfields import PhoneNumberField
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -42,6 +44,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(
         default=True, verbose_name="계정 활성 상태", help_text="탈퇴시 비활성이 먼저됩니다."
     )
+    phone_number = PhoneNumberField(
+        verbose_name="알림 수신 번호",
+        help_text="알림을 수신할 기본 휴대폰 번호입니다. 스크레이핑 모델마다 모두 다를 수 있습니다. 문자에서만 활용됩니다.",
+        blank=True,
+        null=True,
+    )
+
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name="가입일", help_text="계정을 생성한 날짜입니다. 곧 가입일과 동일합니다."
     )
@@ -56,5 +65,4 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         app_label = "accounts"
-        verbose_name = "사용자"
-        verbose_name_plural = "사용자"
+        verbose_name = verbose_name_plural = "사용자"

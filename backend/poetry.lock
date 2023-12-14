@@ -728,6 +728,24 @@ docs = ["furo (>=2021.8.17b43,<2021.9.dev0)", "sphinx (>=3.5.0)", "sphinx-notfou
 testing = ["coverage[toml] (>=5.0a4)", "pytest (>=4.6.11)"]
 
 [[package]]
+name = "django-phonenumber-field"
+version = "7.2.0"
+description = "An international phone number field for django models."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "django-phonenumber-field-7.2.0.tar.gz", hash = "sha256:20c7c5c449e33eed5fd45ef8d3dc668faabaeff3277eddd1892b262d686ba381"},
+    {file = "django_phonenumber_field-7.2.0-py3-none-any.whl", hash = "sha256:16778f2717ea2aecc6178beb0d6bc431c78c6a8b0474e1fa8face040efeb6e9e"},
+]
+
+[package.dependencies]
+Django = ">=3.2"
+
+[package.extras]
+phonenumbers = ["phonenumbers (>=7.0.2)"]
+phonenumberslite = ["phonenumberslite (>=7.0.2)"]
+
+[[package]]
 name = "djangorestframework"
 version = "3.14.0"
 description = "Web APIs for Django, made easy."
@@ -1418,6 +1436,17 @@ python-versions = ">=3.7"
 files = [
     {file = "pathspec-0.11.2-py3-none-any.whl", hash = "sha256:1d6ed233af05e679efb96b1851550ea95bbb64b7c490b0f5aa52996c11e92a20"},
     {file = "pathspec-0.11.2.tar.gz", hash = "sha256:e0d8d0ac2f12da61956eb2306b69f9469b42f4deb0f3cb6ed47b9cce9996ced3"},
+]
+
+[[package]]
+name = "phonenumbers"
+version = "8.13.26"
+description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
+optional = false
+python-versions = "*"
+files = [
+    {file = "phonenumbers-8.13.26-py2.py3-none-any.whl", hash = "sha256:b2308c9c5750b8f10dd30d94547afd66bce60ac5e93aff227f95740557f32752"},
+    {file = "phonenumbers-8.13.26.tar.gz", hash = "sha256:937d70aeceb317f5831dfec28de855a60260ef4a9d551964bec8e7a7d0cf81cd"},
 ]
 
 [[package]]
@@ -2347,4 +2376,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "47f4f56207f5427f18506ac74d034985227cd98cb9b27eae7fb6e05e75393028"
+content-hash = "cc861df47c27020ac56241664088b41b3cd3fa1e2620a397cfee87ab25aca68a"
