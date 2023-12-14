@@ -45,7 +45,9 @@ settings = dict(
 
 async def send_noti(message_moduel: MessagingModule, noti_with_scraping: dict):
     # noti_with_scraping 는 `get_all_noti_with_scarping_url` 쿼리 결과 row 하나
-    main_platform = NOTI_PLATFORM_CHOICES[noti_with_scraping["main_noti_platform_id"]]
+    main_platform = NOTI_PLATFORM_CHOICES[
+        str(noti_with_scraping["main_noti_platform_id"])
+    ]
     if main_platform == "email":
         html_content = f"""
             <strong>공지드롭에서</strong> 제출하신 {noti_with_scraping["website"]} 에서 변화가 감지되었습니다. \n
@@ -90,6 +92,8 @@ async def main():
             noti_result: dict
             bulk_send_log_data.append((noti_with_scraping["id"], noti_result))
             await rep.update_noti_clear(noti_with_scraping["id"])
+
+        # bulk insert query 본체
         await rep.bulk_create_noti_send_log(bulk_send_log_data)
         log.info(f"{len(noti_results)} 개 noti clear")
         await rep.close()
