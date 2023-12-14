@@ -18,11 +18,11 @@ class MessagingModule:
     def _django_env(self) -> None:
         from django.conf import settings
 
-        self.sms_account_sid = settings["SMS_ACCOUNT_ID"]
-        self.sms_auth_token = settings["SMS_AUTH_TOKEN"]
-        self.sms_from_num = settings["SMS_FROM_NUM"]
-        self.email_api_key = settings["EMAIL_API_KEY"]
-        self.email_from_mail = settings["EMAIL_FROM_EMAIL"]
+        self.sms_account_sid = settings.SMS_ACCOUNT_ID
+        self.sms_auth_token = settings.SMS_AUTH_TOKEN
+        self.sms_from_num = settings.SMS_FROM_NUM
+        self.email_api_key = settings.EMAIL_API_KEY
+        self.email_from_mail = settings.EMAIL_FROM_EMAIL
 
     # Find your Account SID and Auth Token at twilio.com/console
     # and set the environment variables. See http://twil.io/secure

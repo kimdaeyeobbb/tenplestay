@@ -51,22 +51,28 @@ class NotiAdmin(admin.ModelAdmin):
             return format_html('<span style="color: green;">●</span> Y')
         return format_html('<span style="color: red;">●</span> N')
 
-    @admin.display(description="Noti again")
+    @admin.display(description="알림 다시 전송하기")
     def admin_send_action(self, request, queryset: QuerySet[Noti]):
         message_moduel = MessagingModule(run_time="django")
 
         for noti in queryset:
-            main_platform = NOTI_PLATFORM_CHOICES[str(noti.main_noti_platform_id)]
+            main_platform = NOTI_PLATFORM_CHOICES[str(noti.main_noti_platform.id)]
             if main_platform == "email":
-                html_content = message_moduel.get_email_template(noti.website)
-                result = message_moduel.send_email(noti.email, html_content)
+                html_content = message_moduel.get_email_template(
+                    noti.scraping_url.website
+                )
+                result = message_moduel.send_email(noti.user.email, html_content)
             elif main_platform == "sms":
-                sms_content = message_moduel.get_sms_template(noti.website)
-                result = message_moduel.send_sms(noti.phone_number, sms_content)
+                sms_content = message_moduel.get_sms_template(noti.scraping_url.website)
+                result = message_moduel.send_sms(
+                    str(noti.scraping_url.phone_number), sms_content
+                )
 
             # 신규 발송 로그 저장
             new_noti_send_log = NotiSendLog(noti=noti, result=result)
             new_noti_send_log.save()
+            noti.is_send = True
+            noti.save()
 
         self.message_user(
             request,
