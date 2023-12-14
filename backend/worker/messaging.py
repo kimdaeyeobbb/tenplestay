@@ -1,7 +1,7 @@
 import os
 import asyncio
 import sys
-# import json
+import json
 from asyncio import sleep
 
 from dotenv import load_dotenv
@@ -90,7 +90,9 @@ async def main():
         ):
             noti_with_scraping: dict
             noti_result: dict
-            bulk_send_log_data.append((noti_with_scraping["id"], noti_result))
+            bulk_send_log_data.append(
+                (noti_with_scraping["id"], json.dumps(noti_result))
+            )
             await rep.update_noti_clear(noti_with_scraping["id"])
 
         # bulk insert query 본체
