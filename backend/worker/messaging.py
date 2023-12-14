@@ -57,7 +57,7 @@ async def send_noti(message_moduel: MessagingModule, noti_with_scraping: dict):
         result = message_moduel.send_email(noti_with_scraping["email"], html_content)
     elif main_platform == "sms":
         sms_content = f"""
-            제출하신 {noti_with_scraping["website"]} 에서 변화가 감지되었습니다.\n
+            제출하신 {noti_with_scraping["website"]} 에서 변화가 감지되었습니다.
             지금 들어가서 확인하세요!
         """
         result = message_moduel.send_sms(
@@ -97,7 +97,7 @@ async def main():
         log.info(f"{len(noti_results)} 개 noti clear")
         await rep.close()
     except Exception as e:
-        log.error(f"main error > {e}, {e.__class__}")
+        log.error(f"main error >> {e}, {e.__class__}")
     finally:
         await sleep(600)  # Sleep for 600 seconds (10 minutes)
 

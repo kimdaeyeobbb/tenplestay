@@ -142,7 +142,7 @@ class Repository:
 
     async def bulk_create_noti_send_log(self, noti_send_log_data: list[tuple]) -> None:
         sql = """
-            INSERT INTO <your_notisendlog_table_name> 
+            INSERT INTO notifications_notisendlog
                 (noti_id, result, created_at, updated_at) 
             VALUES 
                 ($1, $2, NOW(), NOW());
