@@ -41,9 +41,21 @@ settings = dict(
     EMAIL_FROM_EMAIL=EMAIL_FROM_EMAIL,
 )
 
+
+def convert_to_serializable(data):
+    if isinstance(data, bytes):
+        return data.decode("utf-8")
+    elif isinstance(data, dict):
+        return {key: convert_to_serializable(value) for key, value in data.items()}
+    elif isinstance(data, list):
+        return [convert_to_serializable(element) for element in data]
+    elif hasattr(data, "isoformat"):  # datetime 객체 확인
+        return data.isoformat()
+    else:
+        return data
+
+
 # 일단 retry 고민 없이, main platfrom으로만 단발성으로 발송 진행
-
-
 async def send_noti(message_moduel: MessagingModule, noti_with_scraping: dict):
     # noti_with_scraping 는 `get_all_noti_with_scarping_url` 쿼리 결과 row 하나
     main_platform = NOTI_PLATFORM_CHOICES[
@@ -91,7 +103,10 @@ async def main():
             noti_with_scraping: dict
             noti_result: dict
             bulk_send_log_data.append(
-                (noti_with_scraping["id"], json.dumps(noti_result))
+                (
+                    noti_with_scraping["id"],
+                    json.dumps(convert_to_serializable(noti_result)),
+                )
             )
             await rep.update_noti_clear(noti_with_scraping["id"])
 
