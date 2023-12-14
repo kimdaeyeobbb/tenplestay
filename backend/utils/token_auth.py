@@ -15,7 +15,9 @@ class CustomJWTAuthentication(JWTAuthentication):
             and "refresh_token" in request.COOKIES
             and "HTTP_AUTHORIZATION" not in request.META
         ):
-            if request.path.startswith("/api/ping"):
+            if request.path.startswith("/api/ping") or request.path.startswith(
+                "/api/schema"
+            ):
                 return super().authenticate(request)
 
             access_token = request.COOKIES.get("access_token")

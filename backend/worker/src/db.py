@@ -136,7 +136,7 @@ class Repository:
         sql = """
             UPDATE notifications_noti
             SET is_send = true, updated_at = NOW()
-            WHERE id = $2;
+            WHERE id = $1;
         """
         await self.conn.execute(sql, noti_id)
 

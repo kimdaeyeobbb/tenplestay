@@ -58,8 +58,7 @@ async def send_noti(message_moduel: MessagingModule, noti_with_scraping: dict):
     elif main_platform == "sms":
         sms_content = f"""
             제출하신 {noti_with_scraping["website"]} 에서 변화가 감지되었습니다.\n
-            지금 들어가서 확인하세요! \n
-            {noti_with_scraping["website"]}
+            지금 들어가서 확인하세요!
         """
         result = message_moduel.send_sms(
             noti_with_scraping["phone_number"], sms_content
