@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView, status
@@ -11,6 +11,8 @@ from utils.utils import is_process_running, log_file_reader
 
 
 class PingAPIView(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, requset: Request):
         scraping_process_status = is_process_running("scraping.py")
         messaging_process_status = is_process_running("messaging.py")
