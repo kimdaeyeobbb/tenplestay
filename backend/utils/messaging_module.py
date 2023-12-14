@@ -10,18 +10,11 @@ from sendgrid.helpers.mail import Mail
 
 class MessagingModule:
     def __init__(self) -> None:
-        SMS_ACCOUNT_ID = "ACda518855460521af072939735cc34d38"
-        SMS_AUTH_TOKEN = "1d63231a4b6a5b715cd108bdd206b2ef"
-        SMS_FROM_NUM = "+12057516527"
-        EMAIL_API_KEY = (
-            "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"
-        )
-        EMAIL_FROM_EMAIL = "hyeon.wo.dev@tenplestay.kro.kr"
-        self.sms_account_sid = SMS_ACCOUNT_ID  # settings["SMS_ACCOUNT_ID"]
-        self.sms_auth_token = SMS_AUTH_TOKEN  # settings["SMS_AUTH_TOKEN"]
-        self.sms_from_num = SMS_FROM_NUM  # settings["SMS_FROM_NUM"]
-        self.email_api_key = EMAIL_API_KEY  # settings["EMAIL_API_KEY"]
-        self.email_from_mail = EMAIL_FROM_EMAIL  # settings["EMAIL_FROM_EMAIL"]
+        self.sms_account_sid = settings["SMS_ACCOUNT_ID"]
+        self.sms_auth_token = settings["SMS_AUTH_TOKEN"]
+        self.sms_from_num = settings["SMS_FROM_NUM"]
+        self.email_api_key = settings["EMAIL_API_KEY"]
+        self.email_from_mail = settings["EMAIL_FROM_EMAIL"]
 
     # Find your Account SID and Auth Token at twilio.com/console
     # and set the environment variables. See http://twil.io/secure
