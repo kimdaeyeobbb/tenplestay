@@ -116,9 +116,38 @@ class Repository:
             scraping_url["main_noti_platform_id"],
             scraping_url["sub_noti_platform_id"],
         )
-    
-    async def get_all_noti_with_scarping_url(self):
-        ...
+
+    async def get_all_noti_with_scarping_url(self) -> list[dict]:
+        sql = """
+            select 
+                nn.id, nn.retry_count, nn.main_noti_platform_id, nn.sub_noti_platform_id,
+                ss.website, ss.keywords, ss.phone_number, au.email
+            from notifications_noti nn
+            inner join scraping_scrapingurl ss 
+            on nn.scraping_url_id = ss.id 
+            inner join accounts_user au 
+            on nn.user_id = au.id
+            where nn.is_send = false;
+        """
+        result = await self.conn.fetch(sql)
+        return [dict(record) for record in result]
+
+    async def update_noti_clear(self, noti_id: str):
+        sql = """
+            UPDATE notifications_noti
+            SET is_send = true, updated_at = NOW()
+            WHERE id = $2;
+        """
+        await self.conn.execute(sql, noti_id)
+
+    async def bulk_create_noti_send_log(self, noti_send_log_data: list[tuple]) -> None:
+        sql = """
+            INSERT INTO <your_notisendlog_table_name> 
+                (noti_id, result, created_at, updated_at) 
+            VALUES 
+                ($1, $2, NOW(), NOW());
+        """
+        await self.conn.executemany(sql, noti_send_log_data)
 
     async def close(self):
         if self.conn:

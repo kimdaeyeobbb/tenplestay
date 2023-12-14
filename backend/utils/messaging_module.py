@@ -27,10 +27,10 @@ class MessagingModule:
     # Find your Account SID and Auth Token at twilio.com/console
     # and set the environment variables. See http://twil.io/secure
     # https://www.twilio.com/docs/python/install
-    def send_sms(self, to_number: str) -> dict:
+    def send_sms(self, to_number: str, body: str) -> dict:
         client = Client(self.sms_account_sid, self.sms_auth_token)
         message = client.messages.create(
-            body="Join Earth's mightiest heroes. Like Kevin Bacon.",
+            body="[공지드롭] url 페이지 변동 알림" + body,
             from_=self.sms_from_num,
             to=to_number,
         )
@@ -62,12 +62,12 @@ class MessagingModule:
             ),
         )
 
-    def send_email(self, to_address: str) -> dict:
+    def send_email(self, to_address: str, html_content: str) -> dict:
         message = Mail(
             from_email=self.email_from_mail,
             to_emails=to_address,
-            subject="Sending with Twilio SendGrid is Fun",
-            html_content="<strong>and easy to do anywhere, even with Python</strong>",
+            subject="[공지드롭] url 페이지 변동 알림",
+            html_content=html_content,
         )
         try:
             sg = SendGridAPIClient(self.email_api_key)
@@ -89,5 +89,5 @@ class MessagingModule:
 
 if __name__ == "__main__":
     mm = MessagingModule()
-    mm.send_sms("+821053285816")
-    mm.send_email("qlgks1@naver.com")
+    mm.send_sms("+821053285816", "문자 테스트")
+    mm.send_email("qlgks1@naver.com", "메일 테스트")
