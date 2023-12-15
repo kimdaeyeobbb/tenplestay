@@ -23,20 +23,20 @@ function CommonRouter() {
     const checkAuthorization = async () => {
       try {
         const response = await userCheckApi();
-        console.log('공통 라우터에서 response확인: ', response);
-        console.log('공통 라우터에서 상태 코드 확인: ', response.status);
+        // console.log('공통 라우터에서 response확인: ', response);
+        // console.log('공통 라우터에서 상태 코드 확인: ', response.status);
         setStatusCode(response.status);
         // setIsAuthorized(response.status === 200);
       } catch (error) {
-        console.log('에러 확인: ', error);
+        // console.log('에러 확인: ', error);
       }
     };
 
     checkAuthorization();
-    console.log('유즈 이펙트 돌때마다 체크: ', statusCode);
+    // console.log('유즈 이펙트 돌때마다 체크: ', statusCode);
   }, [statusCode]); // 빈 배열은 컴포넌트가 마운트될 때 한 번만 실행됩니다.
 
-  console.log('밖에서 상태코드 체크: ', statusCode);
+  // console.log('밖에서 상태코드 체크: ', statusCode);
   return (
     <Routes>
       <Route>
@@ -44,7 +44,7 @@ function CommonRouter() {
         {/* {statusCode === 401 && (
           <Route path="/" element={<Navigate to="/landing" replace />} />
         )} */}
-
+        {/* 
         <Route
           path="/"
           element={
@@ -54,7 +54,7 @@ function CommonRouter() {
               <Navigate to="/landing" replace />
             )
           }
-        />
+        /> */}
 
         <Route path="/landing" element={<Landing />}></Route>
         <Route path="/registerurl" element={<RegisterURL />}></Route>
