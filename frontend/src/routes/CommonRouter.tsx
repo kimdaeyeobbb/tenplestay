@@ -21,28 +21,24 @@ function CommonRouter() {
     }
   };
 
-  // 로그인 여부 체크하기
   useEffect(() => {
     checkAuthorization();
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩 중 표시
+    return <div>Loading...</div>;
   }
 
   return (
     <Routes>
-      {/* 로그인 상태가 아니면 /landing으로 리디렉션 */}
-      {!loginStatus && <Route path="*" element={<Navigate to="/landing" replace />} />}
+      {/* 로그인 상태에 따라 리디렉션 처리 */}
+      <Route path="/" element={loginStatus ? <Navigate to="/registerurl" replace /> : <Navigate to="/landing" replace />} />
 
-      {/* 로그인 상태일 때 사용할 라우트 */}
-      {loginStatus && (
-        <>
-          <Route path="/landing" element={<Landing />}></Route>
-          <Route path="/registerurl" element={<RegisterURL />}></Route>
-          {/* 추가적인 로그인 필요 라우트 여기에 작성 */}
-        </>
-      )}
+      {/* 항상 렌더링되는 라우트 */}
+      <Route path="/landing" element={<Landing />} />
+      <Route path="/registerurl" element={<RegisterURL />} />
+
+      {/* 추가적인 라우트는 여기에 추가 */}
     </Routes>
   );
 }
