@@ -1,7 +1,4 @@
 import GoogleLoginButton from '../../components/ui/Button/GoogleLoginButton';
-// import { oauthApicallByCode } from '../../apis/oauthApicallByCode';
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 
 const Landing = () => {
 
