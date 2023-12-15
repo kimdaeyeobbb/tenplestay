@@ -11,9 +11,9 @@ def extract_domain(url):
 
 def is_process_running(process_name):
     # 모든 실행 중인 프로세스를 순회합니다.
-    for proc in psutil.process_iter(["pid", "name"]):
-        # 특정 프로세스 이름이 있는지 확인합니다.
-        if process_name.lower() in proc.info["name"].lower():
+    for proc in psutil.process_iter(["pid", "name", "cmdline"]):
+        proc_run_cmd: list = proc.info["cmdline"]
+        if any(process_name.lower() in s.lower() for s in proc_run_cmd):
             return True
     return False
 
