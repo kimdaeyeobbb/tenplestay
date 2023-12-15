@@ -1,9 +1,10 @@
 import axios, { AxiosError } from 'axios';
+import api from '.';
 
 export const userCheckApi = async () => {
   try {
-    const endpoint = `api/accounts/user/`;
-    const response = await axios.get(endpoint);
+    const endpoint = `/api/accounts/user/`;
+    const response = await api.get(endpoint);
     return response;
   } catch (error) {
     if (axios.isAxiosError(error)) {

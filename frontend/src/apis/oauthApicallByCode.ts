@@ -1,5 +1,5 @@
-import axios from 'axios';
 
+import api from '.';
 
 const oauthEndPoint: {
   google: string;
@@ -17,7 +17,7 @@ export const oauthApicallByCode = async (code: string, platform: string = "googl
   try {
     const endpoint = oauthEndPoint[platform];
     const url = `${endpoint}?code=${code}`;
-    const response = await axios.get(url);
+    const response = await api.get(url);
     console.log(response.data);
   } catch (error) {
     throw error;
