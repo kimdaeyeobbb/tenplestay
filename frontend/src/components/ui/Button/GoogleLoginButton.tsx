@@ -13,11 +13,12 @@ const GoogleLoginButton = () => {
 
     if (code) {
       await oauthApicallByCode(code);
+      // 여기까지 오면 성공한거, home으로 보내던가 여기 그대로 두던가 선택
     }
-  }
+  };
 
   useEffect(() => {
-    login()
+    login();
   }, [])
 
   const handleGoogleLogin = () => {
