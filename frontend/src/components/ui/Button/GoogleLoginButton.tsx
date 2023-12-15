@@ -4,7 +4,7 @@ import { getGoogleAuthURL } from '../../../apis/googleLogin';
 const GoogleLoginButton = () => {
   const handleGoogleLogin = () => {
     const authURL = getGoogleAuthURL();
-    // window.location.href = authURL;
+    window.location.href = authURL;
     console.log('URL 확인: ', authURL);
   };
 
