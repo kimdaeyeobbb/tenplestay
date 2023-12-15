@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Landing from '../pages/landing/Landing';
 import RegisterURL from '../pages/registerURL/RegisterURL';
 import { userCheckApi } from '../apis/userCheckApi';
