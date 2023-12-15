@@ -1,17 +1,26 @@
-{% extends "admin/base_site.html" %}
+{% extends "admin/base_site.html" %} {% block content %}
+<style>
+  .module table {
+    width: 100%;
+    table-layout: fixed;
+  }
 
-{% block content %}
-  <div class="module">
-    <h1>Log Viewer</h1>
-    <table>
-      <tr>
-        <th>Scraping Log Content</th>
-        <th>Messaging Log Content</th>
-      </tr>
-      <tr>
-        <td>{{ scraping_log_content|linebreaksbr }}</td>
-        <td>{{ messaging_log_content|linebreaksbr }}</td>
-      </tr>
-    </table>
-  </div>
+  .module th,
+  .module td {
+    width: 50%;
+  }
+</style>
+<div class="module">
+  <h1>Log Viewer</h1>
+  <table>
+    <tr>
+      <th>Scraping Log Content</th>
+      <th>Messaging Log Content</th>
+    </tr>
+    <tr>
+      <td>{{ scraping_log_content|linebreaksbr }}</td>
+      <td>{{ messaging_log_content|linebreaksbr }}</td>
+    </tr>
+  </table>
+</div>
 {% endblock %}
