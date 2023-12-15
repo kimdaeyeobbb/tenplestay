@@ -4,12 +4,18 @@ import { useEffect } from 'react';
 
 const Landing = () => {
   useEffect(() => {
+    const pathname = new URLSearchParams(window.location.pathname);
+    console.log("hostname뒤의 '/' 문자 뒤의 경로: ", pathname);
+
     const urlParams = new URLSearchParams(window.location.search);
+    console.log('urlparmas 확인: ', urlParams);
+
     const code = urlParams.get('code');
     const scope = urlParams.get('scope');
+    console.log('코드 확인: ', 'scope 확인: ', scope);
 
     if (code && scope) {
-      const platform = (scope.includes("google") ? "google" : "kakao");
+      const platform = scope.includes('google') ? 'google' : 'kakao';
       oauthApicallByCode(code, platform);
     }
   }, []);
