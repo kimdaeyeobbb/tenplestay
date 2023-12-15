@@ -8,7 +8,7 @@ const GoogleLoginButton = () => {
     useEffect(() => {
       const location = useLocation();
       console.log('위치 확인: ', location);
-    });
+    }, []);
 
     const authURL = getGoogleAuthURL();
 

@@ -7,7 +7,7 @@ const Landing = () => {
   useEffect(() => {
     const location = useLocation();
     console.log('위치 확인: ', location);
-  });
+  }, []);
   // useEffect(() => {
   //   const pathname = new URLSearchParams(window.location.pathname);
   //   console.log("hostname뒤의 '/' 문자 뒤의 경로: ", pathname);
