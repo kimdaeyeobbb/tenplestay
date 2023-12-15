@@ -1,14 +1,20 @@
-import axios from 'axios';
-// import instance from './index';
+import axios, { AxiosError } from 'axios';
 
-// auth 토큰값 기반으로 사용자의 정보를
 export const userCheckApi = async () => {
   try {
     const endpoint = `api/accounts/user/`;
-    // /return instance.get(endpoint);
     const response = await axios.get(endpoint);
     return response;
   } catch (error) {
+    if (axios.isAxiosError(error)) {
+      // Axios 에러인 경우, HTTP 상태 코드 확인
+      const axiosError = error as AxiosError;
+      if (axiosError.response && axiosError.response.status === 401) {
+        // 상태 코드가 401인 경우, 응답을 반환
+        return axiosError.response;
+      }
+    }
+    // 그 외의 경우, 에러를 던짐
     throw error;
   }
 };

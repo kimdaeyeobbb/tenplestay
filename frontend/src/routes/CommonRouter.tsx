@@ -1,64 +1,48 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import Landing from '../pages/landing/Landing';
 import RegisterURL from '../pages/registerURL/RegisterURL';
 import { userCheckApi } from '../apis/userCheckApi';
 import { useState, useEffect } from 'react';
 
 function CommonRouter() {
-  const [statusCode, setStatusCode] = useState(0);
+  const [loginStatus, setLoginStatus] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // const checkAuthorization = async () => {
-  //   try {
-  //     const response = await userCheckApi();
-  //     console.log('공통 라우터에서 response확인: ', response);
-  //     console.log('공통 라우터에서 상태 코드 확인: ', response.status);
-  //     setStatusCode(response.status);
-  //     // setIsAuthorized(response.status === 200);
-  //   } catch (error) {
-  //     console.log('에러 확인: ', error);
-  //   }
-  // };
-
-  useEffect(() => {
-    const checkAuthorization = async () => {
-      try {
-        const response = await userCheckApi();
-        // console.log('공통 라우터에서 response확인: ', response);
-        // console.log('공통 라우터에서 상태 코드 확인: ', response.status);
-        setStatusCode(response.status);
-        // setIsAuthorized(response.status === 200);
-      } catch (error) {
-        // console.log('에러 확인: ', error);
+  const checkAuthorization = async () => {
+    try {
+      const response = await userCheckApi();
+      if (response.status === 200) {
+        setLoginStatus(true);
       }
-    };
+    } catch (error) {
+      console.log('에러 확인: ', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  // 로그인 여부 체크하기
+  useEffect(() => {
     checkAuthorization();
-    // console.log('유즈 이펙트 돌때마다 체크: ', statusCode);
-  }, [statusCode]); // 빈 배열은 컴포넌트가 마운트될 때 한 번만 실행됩니다.
+  }, []);
 
-  // console.log('밖에서 상태코드 체크: ', statusCode);
+  if (isLoading) {
+    return <div>Loading...</div>; // 로딩 중 표시
+  }
+
   return (
     <Routes>
-      <Route>
-        {/* 최초 진입시 권한 확인이 되지 않으면 /landing으로 이동 */}
-        {/* {statusCode === 401 && (
-          <Route path="/" element={<Navigate to="/landing" replace />} />
-        )} */}
-        {/* 
-        <Route
-          path="/"
-          element={
-            statusCode === 200 ? (
-              <Navigate to="/submit-form" replace />
-            ) : (
-              <Navigate to="/landing" replace />
-            )
-          }
-        /> */}
+      {/* 로그인 상태가 아니면 /landing으로 리디렉션 */}
+      {!loginStatus && <Route path="*" element={<Navigate to="/landing" replace />} />}
 
-        <Route path="/landing" element={<Landing />}></Route>
-        <Route path="/registerurl" element={<RegisterURL />}></Route>
-      </Route>
+      {/* 로그인 상태일 때 사용할 라우트 */}
+      {loginStatus && (
+        <>
+          <Route path="/landing" element={<Landing />}></Route>
+          <Route path="/registerurl" element={<RegisterURL />}></Route>
+          {/* 추가적인 로그인 필요 라우트 여기에 작성 */}
+        </>
+      )}
     </Routes>
   );
 }
