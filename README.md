@@ -1,3 +1,5 @@
+![banner](https://raw.githubusercontent.com/potenday-project/tenplestay/main/frontend/public/dummy/notion-banner.jpg)
+
 # TENPLE STAY
 
 > Get all notifications what you want by "Tenplestay" [ Notification Web Scrapper SaaS ] <br/>
@@ -16,5 +18,9 @@
 
 ### 2) frontend
 
-1. ...
-2. ...
+- vite 사용
+
+1. `npm install`
+2. `cp /frontend/.env-sample /frontend/.env` for set up the environment variable
+3. `npm run dev`
+4. `npm run build`
