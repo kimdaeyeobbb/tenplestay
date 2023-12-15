@@ -2,9 +2,9 @@
 import axios, { AxiosError } from 'axios';
 import api from '.';
 
-export const fetchAllScrapingUrl = async () => {
+export const fetchAllScrapingUrl = async (page: number = 1) => {
   try {
-    const endpoint = `/api/scraping/`;
+    const endpoint = `/api/scraping/?page=${page}`;
     const response = await api.get(endpoint);
     return response;
   } catch (error) {

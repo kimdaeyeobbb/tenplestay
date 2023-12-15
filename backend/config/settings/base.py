@@ -159,7 +159,7 @@ DATABASES = {
 # ==================================================================== #
 # https://www.django-rest-framework.org/
 
-DEFAULT_PAGE_SIZE = 20
+DEFAULT_PAGE_SIZE = 10
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
