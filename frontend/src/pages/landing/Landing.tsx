@@ -1,4 +1,3 @@
-import GoogleLoginButton from '../../components/ui/Button/GoogleLoginButton';
 import StartButton from '../../components/ui/Button/StartButton';
 import styled from 'styled-components';
 
@@ -13,9 +12,6 @@ const Wrapper = styled.div`
     background-color: rgba(248, 250, 252, 0.05);
   }
 
-  & > section:nth-child(2) {
-    height: 1380px;
-  }
 `;
 
 const Section = styled.section`
@@ -129,13 +125,7 @@ const Landing = () => {
             </Span>
           </DetailSection>
         </DetailWrapper>
-      </Section>
-      <Section>
-        <h1>랜딩페이지</h1>
-        <GoogleLoginButton />
-        <br />
         <StartButton />
-
       </Section>
     </Wrapper>
   );

@@ -1,4 +1,12 @@
 import { userCheckApi } from '../../../apis/userCheckApi';
+import styled from "styled-components";
+
+
+const Wrapper = styled.div`
+  margin-top: 80px;
+  margin-bottom: 140px;
+  text-align: center;
+`;
 
 const StartButton = () => {
   const handleStartClick = async () => {
@@ -22,14 +30,16 @@ const StartButton = () => {
   };
 
   return (
-    <div>
-      <button
-        className="w-64 h-14 px-3 py-2 bg-indigo-600 rounded-full justify-center items-center gap-2 inline-flex text-white text-2xl font-bold"
-        onClick={handleStartClick}
-      >
-        시작하기
-      </button>
-    </div>
+    <Wrapper>
+      <div>
+        <button
+          className="w-64 h-14 px-3 py-2 bg-indigo-600 rounded-full justify-center items-center gap-2 inline-flex text-white text-[20px]"
+          onClick={handleStartClick}
+        >
+          시작하기
+        </button>
+      </div>
+    </Wrapper>
   );
 };
 
