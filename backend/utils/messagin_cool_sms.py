@@ -68,7 +68,7 @@ def send_a_message(API_KEY, API_SECRET, from_number: str, to_number: str, body: 
         "messages": [
             {
                 "to": to_number,
-                "from": from_number,  # 발신자임
+                "from": from_number.replace("+82", "0"),  # 발신자임
                 "text": body,
             },
         ],
@@ -77,6 +77,7 @@ def send_a_message(API_KEY, API_SECRET, from_number: str, to_number: str, body: 
             "osPlatform": platform.platform() + " | " + platform.python_version(),
         },
     }
+    print(data)
     response = requests.post(url, headers=headers, json=data)
     return response.json()
 

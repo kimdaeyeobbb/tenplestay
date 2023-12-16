@@ -64,8 +64,8 @@ class NotiAdmin(admin.ModelAdmin):
                 result = message_moduel.send_email(noti.user.email, html_content)
             elif main_platform == "sms":
                 sms_content = message_moduel.get_sms_template(noti.scraping_url.website)
-                result = message_moduel.send_sms(
-                    str(noti.scraping_url.phone_number), sms_content
+                result = message_moduel.send_cool_sms(
+                    str(noti.scraping_url.phone_number).replace("+82", "0"), sms_content
                 )
 
             # 신규 발송 로그 저장
