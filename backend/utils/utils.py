@@ -20,30 +20,32 @@ def get_website_title(url: str) -> str:
 
 
 def get_website_favicon(url: str):
-    return_favicon_url = str(extract_domain(url))
+    return_favicon_url = extract_domain(url)
 
     # 404 체크 필요
-    s = get_retry_session()
-    temp = f"http://{return_favicon_url}/favicon.ico"
-    res = s.get(temp, headers=get_header())
-    if res.ok:
-        return temp
+    try:
+        s = get_retry_session()
+        temp = f"http://{return_favicon_url}/favicon.ico"
+        res = s.get(temp, headers=get_header())
+        if res.ok:
+            return temp
 
-    temp = f"https://{return_favicon_url}/favicon.ico"
-    res = s.get(temp, headers=get_header())
-    if res.ok:
-        return temp
+        temp = f"https://{return_favicon_url}/favicon.ico"
+        res = s.get(temp, headers=get_header())
+        if res.ok:
+            return temp
 
-    temp = f"http://www.{return_favicon_url}/favicon.ico"
-    res = s.get(temp, headers=get_header())
-    if res.ok:
-        return temp
+        temp = f"http://www.{return_favicon_url}/favicon.ico"
+        res = s.get(temp, headers=get_header())
+        if res.ok:
+            return temp
 
-    temp = f"https://www.{return_favicon_url}/favicon.ico"
-    res = s.get(temp, headers=get_header())
-    if res.ok:
-        return temp
-    return "https://tenplestay.kro.kr/favicon.ico"
+        temp = f"https://www.{return_favicon_url}/favicon.ico"
+        res = s.get(temp, headers=get_header())
+        if res.ok:
+            return temp
+    except Exception:
+        return "https://tenplestay.kro.kr/favicon.ico"
 
 
 def is_process_running(process_name):
