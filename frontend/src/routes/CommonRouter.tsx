@@ -23,7 +23,9 @@ function CommonRouter() {
   };
 
   useEffect(() => {
+    console.log('권한 확인 전 로그인 상태: ', loginStatus);
     checkAuthorization();
+    console.log('권한 확인 후 로그인 상태: ', loginStatus);
   }, []);
 
   if (isLoading) {
@@ -33,7 +35,16 @@ function CommonRouter() {
   return (
     <Routes>
       {/* 로그인 상태에 따라 리디렉션 처리 */}
-      <Route path="/" element={loginStatus ? <Navigate to="/registerurl" replace /> : <Navigate to="/landing" replace />} />
+      <Route
+        path="/"
+        element={
+          loginStatus ? (
+            <Navigate to="/registerurl" replace />
+          ) : (
+            <Navigate to="/landing" replace />
+          )
+        }
+      />
 
       {/* 항상 렌더링되는 라우트 */}
       <Route path="/landing" element={<Landing />} />

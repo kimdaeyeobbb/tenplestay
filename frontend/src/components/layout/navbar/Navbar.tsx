@@ -32,7 +32,7 @@ const Navbar = () => {
     >
       <a
         href="#"
-        className={`flex items-center  text-grayscale-400 text-2xl px-4 py-6 rounded-lg ${
+        className={`flex items-center  text-grayscale-400 text-lg px-4 py-6 rounded-lg ${
           hoveredItems[index] ? 'hover:bg-grayscale-800 hover:text-white' : ''
         }`}
       >

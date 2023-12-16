@@ -3,10 +3,12 @@ import api from '.';
 
 export const userCheckApi = async () => {
   try {
-    const endpoint = `/api/accounts/user/`;
+    const endpoint = '/api/accounts/user/';
     const response = await api.get(endpoint);
+    console.log('userChekcapi에서 응답: ', response);
     return response;
   } catch (error) {
+    console.log('유저 체크 api에서 에러: ', error);
     if (axios.isAxiosError(error)) {
       // Axios 에러인 경우, HTTP 상태 코드 확인
       const axiosError = error as AxiosError;
