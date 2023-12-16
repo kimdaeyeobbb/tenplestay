@@ -12,10 +12,7 @@ const ClovaKeyword: React.FC<ClovaKeywordProps> = ({ keyword, onClick }) => {
         style={{ cursor: 'pointer' }}
       >
         <div className="w-4 h-4 relative">
-          <img
-            className="absolute"
-            src="../../../public/assets/images/icon/plus.svg"
-          />
+          <img className="absolute" src="assets/images/icon/plus.svg" />
         </div>
         <div className="text-white text-base font-normal font-['SUIT'] leading-7 tracking-tight">
           {keyword}
