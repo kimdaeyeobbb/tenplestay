@@ -66,6 +66,10 @@ const TableRow = styled.tr`
     width: 150px;
     max-width: 150px;
   }
+
+  & > td:last-child {
+    display: flex;
+  }
 `;
 
 const TableHeader = styled.th`
@@ -102,6 +106,9 @@ const TableButton = styled.button`
   padding: 6px 16px 6px 16px;
 `;
 
+const TableImg = styled.img`
+  color: white;
+`;
 
 const Dashboard = () => {
   const [scrapingUrls, setScrapingUrls] = useState<ScrapingUrl[]>([]);
@@ -173,7 +180,7 @@ const Dashboard = () => {
             <TableHeader>등록일</TableHeader>
             <TableHeader>최근 업데이트</TableHeader>
             <TableHeader>상태</TableHeader>
-            <TableHeader>Actions</TableHeader>
+            <TableHeader> </TableHeader>
           </TableRow>
         </thead>
         <tbody>
@@ -187,7 +194,10 @@ const Dashboard = () => {
               <TableCell>{formatDate(url.createdAt)}</TableCell>
               <TableCell>{formatDate(url.updatedAt)}</TableCell>
               <TableCell>{url.isActivate ? <TableButton>활성상태</TableButton> : <TableButton>비활성상태</TableButton>}</TableCell>
-              <TableCell><button>삭제</button></TableCell>
+              <TableCell>
+                <TableImg src="assets/images/icon/share-2.png" />
+                <TableImg src="assets/images/icon/trash-2.png" />
+              </TableCell>
             </TableRow>
           ))}
         </tbody>

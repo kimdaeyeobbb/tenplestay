@@ -134,7 +134,7 @@ async def scrapping(rep: Repository, group_id: str):
     await rep.close()
 
 
-def run_scrapping(group_id):
+def run_scrapping(group_id: str):
     """asyncio 이벤트 루프 생성 및 scrapping 함수 실행, **동기여야 함**"""
     # 새 이벤트 루프 생성 및 설정
     loop = asyncio.new_event_loop()
@@ -148,6 +148,7 @@ def run_scrapping(group_id):
         loop.run_until_complete(scrapping(rep, group_id))
     finally:
         loop.close()
+        log.info(f"end scraping group {group_id}")
 
 
 async def main():
