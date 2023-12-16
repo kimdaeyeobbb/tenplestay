@@ -54,6 +54,24 @@ class ScrapingUrl(BaseModel):
         blank=True,
     )
 
+    # 기타 추가 정보
+    website_name = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True,
+        help_text="제출한 url의 title만 뽑아내서 저장한 필드 입니다.",
+        verbose_name="url 도메인",
+    )
+
+    website_favicon = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True,
+        default="https://tenplestay.kro.kr/favicon.ico",
+        help_text="제출한 url의 favicon의 경로를 저장한 field 입니다.",
+        verbose_name="favicon url",
+    )
+
     # ================================================ #
     # 노티 플랫폼 관련
     # ================================================ #

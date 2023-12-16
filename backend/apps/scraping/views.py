@@ -13,7 +13,7 @@ from konlpy.tag import Okt
 import re
 
 from utils.util_views import NClovaStudioApp
-from utils.utils import extract_domain
+from utils.utils import extract_domain, get_website_favicon, get_website_title
 from utils.retry_session import get_retry_session, get_header
 from .models import ScrapingUrl, ScrapingGroup
 from .serializers import ScrapingUrlSerializer, ScrapingUrlAPISerializer
@@ -40,6 +40,15 @@ class ScrapingUrlListCreateAPIView(generics.ListCreateAPIView):
         if groups:
             scraping_url.scraping_group = random.choice(groups)
 
+        website_title = get_website_title(scraping_url.website)
+        if len(website_title) > 200:
+            website_title = website_title[:200]
+        scraping_url.website_name = website_title
+        
+        website_favicon = get_website_favicon(scraping_url.website)
+        if len(website_favicon) > 200:
+            website_favicon = website_favicon[:200]
+        scraping_url.website_favicon = website_favicon
         scraping_url.user = request.user
         scraping_url.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)

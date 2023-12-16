@@ -1,12 +1,29 @@
 import os
 from urllib.parse import urlparse
+from bs4 import BeautifulSoup
 
 import psutil
+from .retry_session import get_retry_session, get_header
 
 
 def extract_domain(url):
     parsed_url = urlparse(url)
     return parsed_url.netloc
+
+
+def get_website_title(url: str) -> str:
+    s = get_retry_session()
+    res = s.get(url, headers=get_header())
+    hmtl = BeautifulSoup(res.content, "lxml")
+    title = hmtl.find("title").text
+    return title
+
+
+def get_website_favicon(url: str):
+    return_favicon_url = str(extract_domain(url))
+    if "www" not in return_favicon_url:
+        return_favicon_url = f"www.{return_favicon_url}/favicon.ico"
+    return f"https://{return_favicon_url}"
 
 
 def is_process_running(process_name):

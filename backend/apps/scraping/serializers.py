@@ -16,7 +16,14 @@ class ScrapingUrlSerializer(serializers.ModelSerializer):
     class Meta:
         model = ScrapingUrl
         fields = "__all__"
-        read_only_fields = ("id", "scraping_group", "user", "last_scraping_log")
+        read_only_fields = (
+            "id",
+            "scraping_group",
+            "user",
+            "last_scraping_log",
+            "website_name",
+            "website_favicon",
+        )
 
 
 class ScrapingUrlDetailSerializer(serializers.ModelSerializer):
