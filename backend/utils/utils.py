@@ -13,10 +13,12 @@ def extract_domain(url):
 
 def get_website_title(url: str) -> str:
     s = get_retry_session()
-    res = s.get(url, headers=get_header())
-    hmtl = BeautifulSoup(res.content, "lxml")
-    title = hmtl.find("title").text
-    return title
+    try:
+        res = s.get(url, headers=get_header())
+        hmtl = BeautifulSoup(res.content, "lxml")
+        return hmtl.find("title").text
+    except Exception:
+        return extract_domain(url)
 
 
 def get_website_favicon(url: str):
