@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import styled, { css } from 'styled-components';
 import { fetchAllScrapingUrl } from "../../apis/scrapingUrlApis";
+import { userCheckApi } from "../../apis/userCheckApi";
+import LoginModal from "../../components/ui/modal/LoginModal";
 
 interface ScrapingUrl {
   id: number;
@@ -27,6 +29,17 @@ const Wrapper = styled.div`
   color: white;
   display: flex;
   flex-direction: column;
+
+  & > div:last-child {
+    color: black;
+  }
+`;
+
+const TitleWrapper = styled.div`    
+  display: flex;
+  align-items: flex-end;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 const Title = styled.h1`
@@ -38,6 +51,25 @@ const Title = styled.h1`
   font-size: 30px;
   line-height: 52px;
   letter-spacing: -0.6px;
+`;
+
+const SubmitModalBtn = styled.button`
+  margin-right: 100px;
+  border-radius: var(--Radious-circle, 1000px);
+  background: var(--brand-primary, #4353FF);
+  width: 200px;
+  height: 60px;
+  min-height: 32px;
+  max-height: 60px;
+  padding: var(--Spacing-8, 8px) var(--Spacing-12, 12px);
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--Spacing-8, 8px);
+  flex-shrink: 0;
+  font-size: 20px;
+
 `;
 
 const Table = styled.table`
@@ -235,6 +267,7 @@ const PaginationButton = styled.button<PaginationButtonProps>`
 `;
 
 const Dashboard = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [scrapingUrls, setScrapingUrls] = useState<ScrapingUrl[]>([]);
   const [selectedRows, setSelectedRows] = useState<number[]>([]); // 행 선택 여부
   const [paginationInfo, setPaginationInfo] = useState({
@@ -280,6 +313,13 @@ const Dashboard = () => {
   };
 
   const getAllScrapingUrl = async (page: number = 1) => {
+    // 로그인 체크 먼저
+    const response = await userCheckApi();
+    if (response.status != 200) {
+      setIsModalOpen(true);
+      return;
+    }
+
     const { data: { data } } = await fetchAllScrapingUrl(page);
     setScrapingUrls(data.results);
     setPaginationInfo({
@@ -294,6 +334,11 @@ const Dashboard = () => {
 
   const handlePageChange = async (newPage: number) => {
     await getAllScrapingUrl(newPage);
+  };
+
+  const handleCloseModal = () => {
+    // 모달을 닫습니다.
+    setIsModalOpen(false);
   };
 
   // 페이지네이션 버튼 생성
@@ -331,7 +376,15 @@ const Dashboard = () => {
 
   return (
     <Wrapper>
-      <Title>등록된 링크</Title>
+      <TitleWrapper>
+        <Title>등록된 링크</Title>
+        <SubmitModalBtn>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M13.25 6.1665C13.25 5.47615 12.6904 4.9165 12 4.9165C11.3096 4.9165 10.75 5.47615 10.75 6.1665V10.75H6.16669C5.47633 10.75 4.91669 11.3096 4.91669 12C4.91669 12.6904 5.47633 13.25 6.16669 13.25H10.75V17.8332C10.75 18.5235 11.3096 19.0832 12 19.0832C12.6904 19.0832 13.25 18.5235 13.25 17.8332V13.25H17.8334C18.5237 13.25 19.0834 12.6904 19.0834 12C19.0834 11.3096 18.5237 10.75 17.8334 10.75H13.25V6.1665Z" fill="white" />
+          </svg>
+          등록하기
+        </SubmitModalBtn>
+      </TitleWrapper>
       <Table>
         <thead>
           <TableRow key={99999} selected={false}>
@@ -404,6 +457,8 @@ const Dashboard = () => {
           </svg>
         </PaginationButton>
       </PaginationWrapper>
+      {/* 모달 */}
+      <LoginModal show={isModalOpen} onClose={handleCloseModal} />
     </Wrapper>
   );
 };

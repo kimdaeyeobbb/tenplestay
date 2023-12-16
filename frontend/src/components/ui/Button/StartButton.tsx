@@ -1,6 +1,9 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { userCheckApi } from '../../../apis/userCheckApi';
-import styled from "styled-components";
 
+import styled from "styled-components";
+import LoginModal from '../modal/LoginModal';
 
 const Wrapper = styled.div`
   margin-top: 80px;
@@ -9,24 +12,26 @@ const Wrapper = styled.div`
 `;
 
 const StartButton = () => {
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handleStartClick = async () => {
     try {
-      // userCheckApi 호출
       const response = await userCheckApi();
-      console.log('response 확인: ', response);
-
-      // 여기에서 응답(response)에 대한 로직을 추가하세요
       if (response.status === 200) {
-        // 로그인 성공 시의 동작
-        console.log('사용자 로그인 상태 확인: 로그인됨');
+        navigate('/dashboard');
       } else if (response.status === 401) {
-        // 로그인되지 않은 경우의 동작
-        console.log('사용자 로그인 상태 확인: 로그인되지 않음');
+        setIsModalOpen(true);
       }
     } catch (error) {
       // 에러 처리
       console.error('에러 발생:', error);
     }
+  };
+
+  const handleCloseModal = () => {
+    // 모달을 닫습니다.
+    setIsModalOpen(false);
   };
 
   return (
@@ -39,6 +44,7 @@ const StartButton = () => {
           시작하기
         </button>
       </div>
+      <LoginModal show={isModalOpen} onClose={handleCloseModal} />
     </Wrapper>
   );
 };
