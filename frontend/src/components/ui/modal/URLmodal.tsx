@@ -10,9 +10,11 @@ interface ModalProps {
   closeModal: () => void;
 }
 
-const URLmodal: React.FC<ModalProps> = ({
-  closeModal,
-}) => {
+const URLmodal: React.FC<ModalProps> = ({ closeModal }) => {
+  /* 최종적으로 전달할 키워드 */
+  // const willPassKeywords: string[] = [];
+  const [willPassKeywords, setWillPassKeywords] = useState<string[]>([]);
+
   /* 로딩스피너 */
   const [loading, setLoading] = useState(false);
 
@@ -28,11 +30,6 @@ const URLmodal: React.FC<ModalProps> = ({
     setLoading(true); // api 호출 전에 true로 변경해서 로딩화면 띄우기
     try {
       const response = await postURL(inputURL);
-      // console.log('URL 등록후 response: ', response);
-      // console.log(
-      //   'url 등록 후 response 중 필요한 데이터 : ',
-      //   response.data.data.result,
-      // );
       const { summarization, tokens } = response.data.data.result;
       console.log('URL 등록 후 요약본: ', summarization);
       console.log('URL 등록 후 키워드: ', tokens);
@@ -42,7 +39,6 @@ const URLmodal: React.FC<ModalProps> = ({
         const keywords = tokens.map(([keyword]: string) => keyword);
         setClovaKeywords(keywords);
         console.log('키워드들: ', keywords);
-        // 여기에서 키워드를 사용하여 원하는 방식으로 화면에 노출
       }
 
       setLoading(false); // api 호출 완료시 false로 변경해서 로딩화면 숨김
@@ -90,6 +86,9 @@ const URLmodal: React.FC<ModalProps> = ({
       keyword.length <= 5 &&
       !items.some((item) => item.text === keyword)
     ) {
+      console.log('엔터 입력 후 추가된 키워드: ', keyword);
+      setWillPassKeywords((prevKeywords) => [...prevKeywords, keyword]);
+      console.log('엔터 후 api호출을 위해 전달하는 키워드: ', willPassKeywords);
       setItems([...items, { id: items.length + 1, text: keyword }]);
       setKeyword('');
       setError(false);
@@ -108,24 +107,58 @@ const URLmodal: React.FC<ModalProps> = ({
   const handleClovaKeywordClick = (clickedKeyword: string) => {
     // 네이버 클로바가 추천한 키워드를 클릭한 이후에 일어나기를 원하는 동작을 기술
     console.log('클릭된 키워드: ', clickedKeyword);
+
+    /* 최종적으로 전달할 키워드 목록에 클로바가 추천한 키워드 추가 */
+    setWillPassKeywords((prev) => [...prev, clickedKeyword]);
   };
 
   /* 안내 받을 수단 선택 */
-  // const checkedRadioPath = 'assets/images/button/radio_checked.png';
-  // const uncheckedRadioPath = 'assets/images/button/radio_unchecked.png';
+  const [mainNoti, setMainNoti] = useState<number | null>(null);
+  const [subNoti, setSubNoti] = useState<number | null>(null);
+  const [cellphone, setCellphone] = useState<string | null>(null);
+
+  const [isCheckedPhoneNumber, setIsCheckedPhoneNumber] = useState(false);
+  const [isCheckedEmail, setIsCheckedEmail] = useState(false);
+
+  const handlePhoneNumberChange = (phoneNumber: string, isChecked: boolean) => {
+    console.log('입력하고 있는 핸드폰 번호: ', phoneNumber);
+
+    /* 핸드폰 번호: +821012345789 꼴로 변환 */
+    const formattedPhoneNumber: string = '+82' + phoneNumber.replace(/^0/, '');
+    setCellphone(formattedPhoneNumber);
+
+    console.log('sms 체크 여부: ', isCheckedPhoneNumber);
+    setIsCheckedPhoneNumber(isChecked);
+    if (isChecked) {
+      // sms 체크시 메인 알림으로 설정
+      setMainNoti(3);
+    }
+  };
+
+  const handleEmailChange = (email: string, isChecked: boolean) => {
+    console.log('입력하고 있는 이메일: ', email);
+    console.log('이메일 체크 여부: ', isCheckedEmail);
+    setIsCheckedEmail(isChecked);
+    if (isChecked) {
+      // 이메일 체크시 서브 알림으로 설정
+      setSubNoti(1);
+    }
+  };
 
   /* 링크에 대한 모든 정보 입력 후 최종 등록 */
+
   const onClickRegisterLink = async () => {
-    // Call the postURLinfo function with the necessary data
     try {
       const response = await postURLinfo({
         inputURL,
-        clovaKeywords,
-        // Add other data you want to send to the API
+        willPassKeywords,
+        mainNoti,
+        subNoti,
+        cellphone,
       });
 
       // Handle the response as needed
-      console.log('링크 등록 후 response: ', response);
+      console.log('부모 컴포넌트에서 링크 등록 후 response: ', response);
     } catch (error) {
       console.log('링크 등록 에러: ', error);
     }
@@ -192,8 +225,9 @@ const URLmodal: React.FC<ModalProps> = ({
               </div>
 
               <div
-                className={`self-stretch  bg-slate-600 rounded-lg justify-start items-center inline-flex  ${error ? 'border border-error-primary' : ''
-                  }`}
+                className={`self-stretch  bg-slate-600 rounded-lg justify-start items-center inline-flex  ${
+                  error ? 'border border-error-primary' : ''
+                }`}
               >
                 <input
                   type="text"
@@ -207,8 +241,9 @@ const URLmodal: React.FC<ModalProps> = ({
 
               {error && (
                 <div
-                  className={`self-stretch ${error ? 'text-error-primary' : 'text-slate-400'
-                    } 
+                  className={`self-stretch ${
+                    error ? 'text-error-primary' : 'text-slate-400'
+                  } 
                        text-sm font-normal font-['SUIT'] leading-normal tracking-tight`}
                 >
                   최대 3개의 키워드까지 등록됩니다.
@@ -230,7 +265,10 @@ const URLmodal: React.FC<ModalProps> = ({
             onClickKeyword={handleClovaKeywordClick}
           />
           {/* 안내 받을 수단 선택   */}
-          <ContactToolArea />
+          <ContactToolArea
+            onPhoneNumberChange={handlePhoneNumberChange}
+            onEmailChange={handleEmailChange}
+          />
         </article>
 
         {/* 버튼 */}
