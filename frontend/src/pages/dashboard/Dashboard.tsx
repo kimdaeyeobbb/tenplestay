@@ -341,21 +341,18 @@ const Dashboard = () => {
     await getAllScrapingUrl(newPage);
   };
 
-  const handleCloseModal = (type: string = "") => {
+  const handleCloseModal = () => {
     setIsModalOpen(false);
   };
 
   // ============================================ //
+  // 등록하기 모달 
   const handleSubmitCloseModal = () => {
     setSubmitModalOpen(false);
   }
 
   const openSubmitModal = () => {
     setSubmitModalOpen(true);
-  };
-
-  const closeSubmitModal = () => {
-    setSubmitModalOpen(false);
   };
   // ============================================ //
 
