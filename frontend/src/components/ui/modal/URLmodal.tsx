@@ -1,6 +1,8 @@
 import { SetStateAction, useEffect, useState } from 'react';
 import { postURL } from '../../../apis/scraping/postURL';
 import LoadingSpinner from '../../../pages/registerURL/LoadingSpinner';
+import RegisterKeyword from '../../../pages/registerURL/RegisterKeyword';
+import ClovaArea from '../../../pages/registerURL/ClovaArea';
 
 interface ModalProps {
   closeModal: () => void;
@@ -26,11 +28,29 @@ const URLmodal: React.FC<ModalProps> = ({
     setInputURL(event.target.value);
   }
 
+  const [clovaKeywords, setClovaKeywords] = useState<string[]>([]);
+
   const onClickRegisterURL = async () => {
     setLoading(true); // api 호출 전에 true로 변경해서 로딩화면 띄우기
     try {
       const response = await postURL(inputURL);
-      console.log('URL 등록후 response: ', response);
+      // console.log('URL 등록후 response: ', response);
+      // console.log(
+      //   'url 등록 후 response 중 필요한 데이터 : ',
+      //   response.data.data.result,
+      // );
+      const { summarization, tokens } = response.data.data.result;
+      console.log('URL 등록 후 요약본: ', summarization);
+      console.log('URL 등록 후 키워드: ', tokens);
+
+      // tokens 배열을 사용하여 화면에 키워드를 노출
+      if (tokens && tokens.length > 0) {
+        const keywords = tokens.map(([keyword]: string) => keyword);
+        setClovaKeywords(keywords);
+        console.log('키워드들: ', keywords);
+        // 여기에서 키워드를 사용하여 원하는 방식으로 화면에 노출
+      }
+
       setLoading(false); // api 호출 완료시 false로 변경해서 로딩화면 숨김
       return response;
     } catch (error) {
@@ -40,15 +60,14 @@ const URLmodal: React.FC<ModalProps> = ({
 
   useEffect(() => {
     console.log('input에 넣는 URL 확인: ', inputURL);
-    setCellphoneError(false);
-    setEmailError(false);
   });
 
   /* 키워드 예외처리 */
   const [keyword, setKeyword] = useState<string>('');
+
   const [error, setError] = useState<boolean>(false);
-  const [cellphoneError, setCellphoneError] = useState<boolean>(false);
-  const [emailError, setEmailError] = useState<boolean>(false);
+  // const [cellphoneError, setCellphoneError] = useState<boolean>(false);
+  // const [emailError, setEmailError] = useState<boolean>(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newKeyword = event.target.value;
@@ -62,13 +81,42 @@ const URLmodal: React.FC<ModalProps> = ({
     }
   };
 
+  /* 키워드 추가 */
+  const [items, setItems] = useState<{ id: number; text: string }[]>([]);
+
+  const addItem = () => {
+    if (
+      items.length < 3 &&
+      keyword.length <= 5 &&
+      !items.some((item) => item.text === keyword)
+    ) {
+      setItems([...items, { id: items.length + 1, text: keyword }]);
+      setKeyword('');
+      setError(false);
+    } else {
+      setError(true);
+    }
+  };
+
+  /* 키워드 삭제 */
+
+  const onDeleteKeyword = (id: any) => {
+    setItems(items.filter((item) => item.id !== id));
+  };
+
+  /* 클로바 추천 키워드 컨트롤 */
+  const handleClovaKeywordClick = (clickedKeyword: string) => {
+    // 네이버 클로바가 추천한 키워드를 클릭한 이후에 일어나기를 원하는 동작을 기술
+    console.log('클릭된 키워드: ', clickedKeyword);
+  };
+
   /* 안내 받을 수단 선택 */
   const checkedRadioPath = 'assets/images/button/radio_checked.png';
   const uncheckedRadioPath = 'assets/images/button/radio_unchecked.png';
 
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-grayscale-700 px-12 pb-16 rounded-xl">
+      <div className="bg-grayscale-700 px-12 pb-8 rounded-xl">
         {/* 버튼 이외의 영역 */}
         <article className="w-[558px]">
           <section className="border-b border-gray-400 flex pt-10 pb-6 justify-between items-center text-white">
@@ -80,7 +128,7 @@ const URLmodal: React.FC<ModalProps> = ({
             </div>
           </section>
           {/* 사이트 URL 및 키워드 입력  */}
-          <section className="self-stretch h-[260px] mt-12 flex-col justify-start items-start gap-8 flex">
+          <section className="self-stretch h-56 mt-8 flex-col justify-start items-start gap-8 flex">
             {/* 사이트 URL */}
             <div className="self-stretch h-24 flex-col justify-start items-start gap-4 flex">
               <div className="self-stretch text-slate-50 text-xl font-semibold font-['SUIT'] leading-7">
@@ -147,14 +195,23 @@ const URLmodal: React.FC<ModalProps> = ({
                   } 
                        text-sm font-normal font-['SUIT'] leading-normal tracking-tight`}
                 >
-                  최대 5개의 키워드까지 등록됩니다.
+                  최대 3개의 키워드까지 등록됩니다.
                 </div>
               )}
             </div>
           </section>
 
+          {/* 키워드 등록 */}
+          <RegisterKeyword items={items} onDeleteKeyword={onDeleteKeyword} />
+          <button onClick={addItem}>키워드 추가</button>
+
+          {/* 클로바가 추천한 키워드 */}
+          <ClovaArea
+            keywords={clovaKeywords}
+            onClickKeyword={handleClovaKeywordClick}
+          />
           {/* 안내 받을 수단 선택   */}
-          <section className="self-stretch h-[88px] flex-col justify-start items-start gap-8 flex">
+          <section className="self-stretch h-20 flex-col justify-start items-start gap-4 flex">
             <div className="self-stretch text-slate-50 text-xl font-semibold font-['SUIT'] leading-7">
               안내 받을 수단 선택
             </div>
@@ -172,15 +229,18 @@ const URLmodal: React.FC<ModalProps> = ({
                     alt="Kakao"
                   />
                   <div className="text-lg font-medium font-['SUIT'] leading-7 tracking-tight">
-                    카카오톡 수신
+                    문자메시지 수신
                   </div>
                 </div>
 
                 {/* 핸드폰 번호 입력 필드 */}
-                <div
+                {/* <div
                   className={`self-stretch h-[52px] bg-slate-600 rounded-lg justify-start items-center inline-flex  ${
                     cellphoneError ? 'border border-error-primary' : ''
                   }`}
+                > */}
+                <div
+                  className={`self-stretch h-[52px] bg-slate-600 rounded-lg justify-start items-center inline-flex`}
                 >
                   <input
                     type="text"
@@ -211,10 +271,13 @@ const URLmodal: React.FC<ModalProps> = ({
                 </div>
 
                 {/* 이메일 input 영역 */}
-                <div
+                {/* <div
                   className={`self-stretch h-[52px] bg-slate-600 rounded-lg justify-start items-center inline-flex  ${
                     emailError ? 'border border-error-primary' : ''
                   }`}
+                > */}
+                <div
+                  className={`self-stretch h-[52px] bg-slate-600 rounded-lg justify-start items-center inline-flex`}
                 >
                   <input
                     type="email"
@@ -228,7 +291,7 @@ const URLmodal: React.FC<ModalProps> = ({
         </article>
 
         {/* 버튼 */}
-        <div className="self-stretch flex-col justify-center items-center gap-2.5 flex mt-40">
+        <div className="self-stretch flex-col justify-center items-center gap-2.5 flex mt-24">
           <div className="w-[260px] h-[60px] px-3 py-2 bg-indigo-600 rounded-full justify-center items-center gap-2 inline-flex">
             <button
               className="text-white text-2xl font-bold font-['SUIT'] leading-9 close"
