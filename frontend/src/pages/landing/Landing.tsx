@@ -1,5 +1,7 @@
 import StartButton from '../../components/ui/Button/StartButton';
 import styled from 'styled-components';
+import { oauthApicallByCode } from '../../apis/oauthApicallByCode';
+import { useEffect } from 'react';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -63,11 +65,9 @@ const DetailWrapper = styled.div`
 `;
 
 const DetailSection = styled.div`
-
 `;
 
 const DetailImg = styled.img`
-
 `;
 
 const Span = styled.span`
@@ -82,6 +82,24 @@ const Span = styled.span`
 
 
 const Landing = () => {
+  const login = async () => {
+    // URL에서 코드 추출
+    const urlParams = new URLSearchParams(window.location.search);
+    // console.log('로그인시 url 추출: ', urlParams);
+
+    const code = urlParams.get('code');
+    // console.log('로그인시 code 확인: ', code);
+    if (code) {
+      const response = await oauthApicallByCode(code);
+      console.log('구글 로그인시 response 확인: ', response);
+      // 여기까지 오면 성공한거, home으로 보내던가 여기 그대로 두던가 선택
+    }
+  };
+
+  useEffect(() => {
+    login();
+  }, []);
+
   return (
     <Wrapper>
       <Section>

@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from "styled-components";
 import { getGoogleAuthURL } from '../../../apis/googleLogin';
-import { oauthApicallByCode } from '../../../apis/oauthApicallByCode';
 
 // Props 타입 정의
 interface LoginModalProps {
@@ -95,25 +94,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ show, onClose }) => {
     window.location.href = authURL;
     console.log('URL 확인: ', authURL);
   };
-
-  const login = async () => {
-    // URL에서 코드 추출
-    const urlParams = new URLSearchParams(window.location.search);
-    // console.log('로그인시 url 추출: ', urlParams);
-
-    const code = urlParams.get('code');
-    // console.log('로그인시 code 확인: ', code);
-    if (code) {
-      const response = await oauthApicallByCode(code);
-      console.log('구글 로그인시 response 확인: ', response);
-      // 여기까지 오면 성공한거, home으로 보내던가 여기 그대로 두던가 선택
-    }
-  };
-
-  useEffect(() => {
-    login();
-  }, []);
-
 
   return (
     <Wrapper>

@@ -4,6 +4,7 @@ import { fetchAllScrapingUrl } from "../../apis/scrapingUrlApis";
 import { userCheckApi } from "../../apis/userCheckApi";
 import LoginModal from "../../components/ui/modal/LoginModal";
 import URLmodal from "../../components/ui/modal/URLmodal";
+import { deleteURL } from "../../apis/url/deleteURL";
 
 interface ScrapingUrl {
   id: number;
@@ -226,6 +227,12 @@ const TableButton = styled.button`
 
 const TableImg = styled.img`
   color: white;
+  cursor: pointer;
+
+  &:hover {
+    width: 28px;
+    height: 28px;
+  }
 `;
 
 
@@ -270,6 +277,7 @@ const PaginationButton = styled.button<PaginationButtonProps>`
 const Dashboard = () => {
   const [loginStatus, setLoginStatus] = useState(false);
   const [submitModalOpen, setSubmitModalOpen] = useState(false);
+  // const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [scrapingUrls, setScrapingUrls] = useState<ScrapingUrl[]>([]);
   const [selectedRows, setSelectedRows] = useState<number[]>([]); // 행 선택 여부
@@ -315,6 +323,7 @@ const Dashboard = () => {
     return keyword_comps;
   };
 
+  // scrapingUrl target page 가져오기, api 호출 & fetch
   const getAllScrapingUrl = async (page: number = 1) => {
     // 로그인 체크 먼저
     const response = await userCheckApi();
@@ -336,6 +345,19 @@ const Dashboard = () => {
       previous: data.links.previous,
     });
   };
+
+  // scrapingUrl target id 삭제하기, api 호출 & fetch
+  const deleteAScrapingUrl = async (id: number) => {
+    
+    // confirmModalOpen
+
+
+    if (!id) {
+      return;
+    }
+    await deleteURL(id);
+    setScrapingUrls(scrapingUrls.filter(url => url.id !== id));
+  }
 
   const handlePageChange = async (newPage: number) => {
     await getAllScrapingUrl(newPage);
@@ -449,8 +471,14 @@ const Dashboard = () => {
               <TableCell>{url.isActivate ? <TableButton>활성상태</TableButton> : <TableButton>비활성상태</TableButton>}</TableCell>
               <TableCell>
                 <div>
-                  <TableImg src="assets/images/icon/share-2.svg" />
-                  <TableImg src="assets/images/icon/trash-2.svg" />
+                  <TableImg
+                    src="assets/images/icon/share-2.svg"
+                    onClick={() => navigator.clipboard.writeText(url.website)}
+                  />
+                  <TableImg
+                    src="assets/images/icon/trash-2.svg"
+                    onClick={() => deleteAScrapingUrl(url.id)}
+                  />
                 </div>
               </TableCell>
             </TableRow>

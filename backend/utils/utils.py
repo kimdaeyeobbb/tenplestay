@@ -47,7 +47,7 @@ def get_website_favicon(url: str):
         if res.ok:
             return temp
     except Exception:
-        return "https://tenplestay.kro.kr/favicon.ico"
+        return "https://tenplestay.kro.kr/logo.svg"
 
 
 def is_process_running(process_name):
