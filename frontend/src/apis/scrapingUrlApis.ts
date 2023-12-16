@@ -5,7 +5,14 @@ import api from '.';
 export const fetchAllScrapingUrl = async (page: number = 1) => {
   try {
     const endpoint = `/api/scraping/?page=${page}`;
-    const response = await api.get(endpoint);
+    const response = await api.get(endpoint,
+      // 운영계 강제 테스팅을 위한 임시 코드임
+      {
+        headers: {
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAzMzA5ODMzLCJpYXQiOjE3MDI3MDUwMzMsImp0aSI6ImJhNDRjNzNjYjAxYTQ0MjM5MTBiOTE4NWU3NGQxMDllIiwidXNlcl9pZCI6Mn0.cP1GPsRgaimS8m0OuhKZaU8F43E6MpYOWGWbyOIa2-8",
+        },
+      }
+    );
     return response;
   } catch (error) {
     if (axios.isAxiosError(error)) {
