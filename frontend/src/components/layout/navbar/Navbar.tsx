@@ -50,7 +50,7 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="min-w-[16.66667%] border-r border-brand-dark ">
+    <nav className="min-w-[13%] border-r border-brand-dark ">
       <div className="h-full px-3 py-4 overflow-y-auto">
         <ul className="space-y-3 font-medium">
           {renderItem(0, '링크 리스트')}

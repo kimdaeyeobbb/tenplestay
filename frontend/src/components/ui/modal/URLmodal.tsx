@@ -40,6 +40,8 @@ const URLmodal: React.FC<ModalProps> = ({
 
   useEffect(() => {
     console.log('input에 넣는 URL 확인: ', inputURL);
+    setCellphoneError(false);
+    setEmailError(false);
   });
 
   /* 키워드 예외처리 */

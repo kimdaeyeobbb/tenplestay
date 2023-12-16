@@ -1,4 +1,3 @@
-import React from 'react';
 import { userCheckApi } from '../../../apis/userCheckApi';
 
 const StartButton = () => {

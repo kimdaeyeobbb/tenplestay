@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from 'styled-components';
 import { fetchAllScrapingUrl } from "../../apis/scrapingUrlApis";
 
 interface ScrapingUrl {
@@ -27,17 +27,6 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-const PaginationWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  justify-content: center;
-
-  > button {
-    margin: 10px;
-  }
-`;
-
 const Title = styled.h1`
   margin-top: 60px;
   margin-left: 50px;
@@ -59,16 +48,20 @@ const TableRow = styled.tr`
   & > th:nth-child(1), & > td:nth-child(1) {
     width: 36px;
     max-width: 36px;
+    
     text-align: center;
   }
 
   & > th:nth-child(2), & > td:nth-child(2) {
-    width: 150px;
-    max-width: 150px;
+    width: 200px;
+    max-width: 200px;
   }
 
-  & > td:last-child {
+  & > td:last-child > div {
     display: flex;
+    width: 40px;
+    max-width: 40px;
+    gap: 20px;
   }
 `;
 
@@ -80,6 +73,8 @@ const TableHeader = styled.th`
   border-bottom: 1px solid var(--GrayScale-800, #1E293B);
   width: 100px;
   max-width: 100px;
+  height: 64px;
+  max-height: 64px;
   overflow: scroll;
   word-break: break-all;
   text-align: center;
@@ -95,19 +90,68 @@ const TableCell = styled.td`
   border-bottom: 1px solid var(--GrayScale-800, #1E293B);
   width: 100px;
   max-width: 100px;
-  overflow: scroll;
+  height: 64px;
+  max-height: 64px;
   word-break: break-all;
   text-align: center;
+  overflow: scroll;
+  /* overflow: hidden; */
+  text-overflow: ellipsis;
+  white-space: nowrap; // 텍스트가 넘칠 경우 말줄임표로 처리
+
 `;
 
 const TableButton = styled.button`
   border-radius: 999999px;
   background: var(--GrayScale-800, #1E293B);
   padding: 6px 16px 6px 16px;
+
+  &:hover {
+    background: var(--brand-primary, #4353FF);
+  }
 `;
 
 const TableImg = styled.img`
   color: white;
+`;
+
+
+const PaginationWrapper = styled.div`
+  margin: 30px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+`;
+
+interface PaginationButtonProps {
+  isCurrent: boolean;
+}
+
+const PaginationButtonCurrentStyle = css`
+  border-radius: var(--Radious-circle, 99999px);
+  background: var(--GrayScale-700, #334155);
+  width: 32px;
+  height: 32px;
+  padding: var(--Spacing-0, 0px) 2px;
+  color: white;
+  font-weight: 800;
+`;
+
+const PaginationButton = styled.button<PaginationButtonProps>`
+  margin: 10px;
+  color: var(--GrayScale-600, #475569);
+  font-family: SUIT;
+  font-size: 16px;
+  font-style: normal;
+
+  /* 조건부 스타일 적용 */
+  ${props => props.isCurrent && PaginationButtonCurrentStyle}
+
+  &:hover {
+    color: white;
+  }
 `;
 
 const Dashboard = () => {
@@ -153,13 +197,19 @@ const Dashboard = () => {
     let pages = [];
     for (let i = 1; i <= paginationInfo.totalPages; i++) {
       pages.push(
-        <button key={i} onClick={() => handlePageChange(i)} disabled={paginationInfo.currentPage === i}>
+        <PaginationButton
+          key={i}
+          onClick={() => handlePageChange(i)}
+          disabled={paginationInfo.currentPage === i}
+          isCurrent={paginationInfo.currentPage === i}
+        >
           {i}
-        </button>
+        </PaginationButton>
       );
     }
     return pages;
   };
+
 
 
   useEffect(() => {
@@ -195,25 +245,35 @@ const Dashboard = () => {
               <TableCell>{formatDate(url.updatedAt)}</TableCell>
               <TableCell>{url.isActivate ? <TableButton>활성상태</TableButton> : <TableButton>비활성상태</TableButton>}</TableCell>
               <TableCell>
-                <TableImg src="assets/images/icon/share-2.png" />
-                <TableImg src="assets/images/icon/trash-2.png" />
+                <div>
+                  <TableImg src="assets/images/icon/share-2.png" />
+                  <TableImg src="assets/images/icon/trash-2.png" />
+                </div>
               </TableCell>
             </TableRow>
           ))}
         </tbody>
       </Table>
       <PaginationWrapper>
-        <button
+        <PaginationButton
           onClick={() => handlePageChange(paginationInfo.currentPage - 1)}
-          disabled={paginationInfo.currentPage === 1}>
-          &lt;
-        </button>
+          disabled={paginationInfo.currentPage === 1}
+          isCurrent={false}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <path d="M19.3333 22.6666L12.6667 15.9999L19.3333 9.33325" stroke="#CBD5E1" stroke-width="2.22222" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </PaginationButton>
         {renderPageNumbers()}
-        <button
+        <PaginationButton
           onClick={() => handlePageChange(paginationInfo.currentPage + 1)}
-          disabled={paginationInfo.currentPage === paginationInfo.totalPages}>
-          &gt;
-        </button>
+          disabled={paginationInfo.currentPage === paginationInfo.totalPages}
+          isCurrent={false}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <path d="M12.6667 22.6666L19.3333 15.9999L12.6667 9.33325" stroke="#CBD5E1" stroke-width="2.22222" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </PaginationButton>
       </PaginationWrapper>
     </Wrapper>
   );
