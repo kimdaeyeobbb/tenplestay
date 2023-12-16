@@ -4,6 +4,7 @@ import LoadingSpinner from '../../../pages/registerURL/LoadingSpinner';
 import RegisterKeyword from '../../../pages/registerURL/RegisterKeyword';
 import ClovaArea from '../../../pages/registerURL/ClovaArea';
 import ContactToolArea from '../../../pages/registerURL/ContactToolArea';
+import { postURLinfo } from '../../../apis/scraping/postURLinfo';
 
 interface ModalProps {
   closeModal: () => void;
@@ -82,6 +83,12 @@ const URLmodal: React.FC<ModalProps> = ({
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && !error) {
+      addItem();
+    }
+  };
+
   /* 키워드 추가 */
   const [items, setItems] = useState<{ id: number; text: string }[]>([]);
 
@@ -114,6 +121,23 @@ const URLmodal: React.FC<ModalProps> = ({
   /* 안내 받을 수단 선택 */
   // const checkedRadioPath = 'assets/images/button/radio_checked.png';
   // const uncheckedRadioPath = 'assets/images/button/radio_unchecked.png';
+
+  /* 링크에 대한 모든 정보 입력 후 최종 등록 */
+  const onClickRegisterLink = async () => {
+    // Call the postURLinfo function with the necessary data
+    try {
+      const response = await postURLinfo({
+        inputURL,
+        clovaKeywords,
+        // Add other data you want to send to the API
+      });
+
+      // Handle the response as needed
+      console.log('링크 등록 후 response: ', response);
+    } catch (error) {
+      console.log('링크 등록 에러: ', error);
+    }
+  };
 
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
@@ -176,7 +200,7 @@ const URLmodal: React.FC<ModalProps> = ({
               </div>
 
               <div
-                className={`self-stretch h-[52px] bg-slate-600 rounded-lg justify-start items-center inline-flex  ${
+                className={`self-stretch  bg-slate-600 rounded-lg justify-start items-center inline-flex  ${
                   error ? 'border border-error-primary' : ''
                 }`}
               >
@@ -185,6 +209,7 @@ const URLmodal: React.FC<ModalProps> = ({
                   placeholder="5글자 이내 키워드"
                   value={keyword}
                   onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
                   className={`grow self-stretch px-4 py-3 rounded-lg basis-0 text-slate-400 bg-slate-600 text-lg font-medium font-['SUIT'] leading-7 tracking-tight`}
                 />
               </div>
@@ -203,8 +228,11 @@ const URLmodal: React.FC<ModalProps> = ({
           </section>
 
           {/* 키워드 등록 */}
-          <RegisterKeyword items={items} onDeleteKeyword={onDeleteKeyword} />
-          <button onClick={addItem}>키워드 추가</button>
+          <RegisterKeyword
+            items={items}
+            onDeleteKeyword={onDeleteKeyword}
+            error={error}
+          />
 
           {/* 클로바가 추천한 키워드 */}
           <ClovaArea
@@ -225,7 +253,10 @@ const URLmodal: React.FC<ModalProps> = ({
           <div className="w-[260px] h-[60px] px-3 py-2 bg-indigo-600 rounded-full justify-center items-center gap-2 inline-flex">
             <button
               className="text-white text-2xl font-bold font-['SUIT'] leading-9 close"
-              onClick={closeModal}
+              onClick={() => {
+                // closeModal();
+                onClickRegisterLink();
+              }}
             >
               링크 등록
             </button>
