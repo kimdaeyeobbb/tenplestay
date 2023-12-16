@@ -5,6 +5,7 @@ import { userCheckApi } from "../../apis/userCheckApi";
 import LoginModal from "../../components/ui/modal/LoginModal";
 import URLmodal from "../../components/ui/modal/URLmodal";
 import { deleteURL } from "../../apis/url/deleteURL";
+import { ConfirmModal } from "../../components/ui/modal/ConfirmModal";
 
 interface ScrapingUrl {
   id: number;
@@ -277,7 +278,11 @@ const PaginationButton = styled.button<PaginationButtonProps>`
 const Dashboard = () => {
   const [loginStatus, setLoginStatus] = useState(false);
   const [submitModalOpen, setSubmitModalOpen] = useState(false);
-  // const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+
+  // 삭제 전 컨펌
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [selectedIdForDeletion, setSelectedIdForDeletion] = useState(0);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [scrapingUrls, setScrapingUrls] = useState<ScrapingUrl[]>([]);
   const [selectedRows, setSelectedRows] = useState<number[]>([]); // 행 선택 여부
@@ -348,10 +353,6 @@ const Dashboard = () => {
 
   // scrapingUrl target id 삭제하기, api 호출 & fetch
   const deleteAScrapingUrl = async (id: number) => {
-    
-    // confirmModalOpen
-
-
     if (!id) {
       return;
     }
@@ -375,6 +376,32 @@ const Dashboard = () => {
 
   const openSubmitModal = () => {
     setSubmitModalOpen(true);
+  };
+  // ============================================ //
+
+
+  // ============================================ //
+  // 삭제전 모달
+  const openConfirmModal = (id: number) => {
+    if (!id || id === 0) {
+      return;
+    }
+
+    setSelectedIdForDeletion(id);
+    setShowConfirmModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!selectedIdForDeletion || selectedIdForDeletion === 0) {
+      return;
+    }
+
+    await deleteAScrapingUrl(selectedIdForDeletion);
+    setShowConfirmModal(false);
+  };
+
+  const handleDeleteCancel = () => {
+    setShowConfirmModal(false);
   };
   // ============================================ //
 
@@ -477,7 +504,7 @@ const Dashboard = () => {
                   />
                   <TableImg
                     src="assets/images/icon/trash-2.svg"
-                    onClick={() => deleteAScrapingUrl(url.id)}
+                    onClick={() => openConfirmModal(url.id)}
                   />
                 </div>
               </TableCell>
@@ -508,6 +535,12 @@ const Dashboard = () => {
       </PaginationWrapper>
       {/* 등록하기 모달 */}
       {submitModalOpen ? <URLmodal closeModal={handleSubmitCloseModal} /> : null}
+      {/* 삭제전 컨펌 모달 */}
+      <ConfirmModal
+        show={showConfirmModal}
+        onConfirm={handleDeleteConfirm}
+        onClose={handleDeleteCancel}
+      />
       {/* 모달 */}
       <LoginModal show={isModalOpen} onClose={handleCloseModal} />
     </Wrapper>
