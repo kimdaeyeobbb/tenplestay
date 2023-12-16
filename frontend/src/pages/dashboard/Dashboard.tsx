@@ -46,7 +46,15 @@ const Table = styled.table`
   table-layout: fixed;
 `;
 
-const TableRow = styled.tr`
+// TableRow 컴포넌트의 Props 타입 정의
+interface TableRowProps {
+  selected: boolean;
+}
+
+const TableRow = styled.tr<TableRowProps>`
+
+  background-color: ${props => props.selected ? '#1E293B' : 'transparent'};
+
   & > th:nth-child(1), & > td:nth-child(1) {
     width: 36px;
     max-width: 36px;
@@ -82,9 +90,27 @@ const TableHeader = styled.th`
   text-align: center;
 `;
 
-const TableCheckBox = styled.input`
-  border-bottom: 1px solid var(--GrayScale-900, #0A0A0D);
-  background: var(--GrayScale-800, #1E293B);
+
+const TableCheckBox = styled.input.attrs({ type: 'checkbox' })`
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--GrayScale-600, #475569);
+  border-radius: 2px;
+  cursor: pointer;
+
+  &:checked {
+    background-color: var(--brand-primary, #4353FF);
+    border-color: var(--brand-primary, #4353FF);
+  }
+
+  /* &:checked::after {
+    text-align: center;
+    content: 'x';
+  } */
 `;
 
 const TableCell = styled.td`
@@ -100,6 +126,13 @@ const TableCell = styled.td`
   /* overflow: hidden; */
   text-overflow: ellipsis;
   white-space: nowrap; // 텍스트가 넘칠 경우 말줄임표로 처리
+  
+  /* 스크롤 관련 설정 */
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const TableCellMain = styled.div`
@@ -203,6 +236,7 @@ const PaginationButton = styled.button<PaginationButtonProps>`
 
 const Dashboard = () => {
   const [scrapingUrls, setScrapingUrls] = useState<ScrapingUrl[]>([]);
+  const [selectedRows, setSelectedRows] = useState<number[]>([]); // 행 선택 여부
   const [paginationInfo, setPaginationInfo] = useState({
     total: 0,
     pageSize: 10,
@@ -280,6 +314,16 @@ const Dashboard = () => {
     return pages;
   };
 
+  // 행 선택/해제 처리 함수
+  const toggleRowSelection = (id: number) => {
+    setSelectedRows(prev => {
+      if (prev.includes(id)) {
+        return prev.filter(rowId => rowId !== id);
+      } else {
+        return [...prev, id];
+      }
+    });
+  };
 
   useEffect(() => {
     getAllScrapingUrl(1);
@@ -290,7 +334,7 @@ const Dashboard = () => {
       <Title>등록된 링크</Title>
       <Table>
         <thead>
-          <TableRow>
+          <TableRow key={99999} selected={false}>
             <TableHeader>
               <TableCheckBox type="checkbox" />
             </TableHeader>
@@ -304,16 +348,20 @@ const Dashboard = () => {
         </thead>
         <tbody>
           {scrapingUrls.map(url => (
-            <TableRow key={url.id}>
+            <TableRow key={url.id} selected={selectedRows.includes(url.id)}>
               <TableCell>
-                <TableCheckBox type="checkbox" />
+                <TableCheckBox
+                  type="checkbox"
+                  checked={selectedRows.includes(url.id)}
+                  onChange={() => toggleRowSelection(url.id)}
+                />
               </TableCell>
               <TableCell>
                 <TableCellMain>
                   <TableImg src={url.websiteFavicon} />
                   <div>
                     <span>{(url.websiteName) ? url.websiteName : getDomain(url.website)}</span>
-                    <TableCellSpan>{url.website}</TableCellSpan>
+                    <TableCellSpan><a href={url.website}>{url.website}</a></TableCellSpan>
                   </div>
                 </TableCellMain>
               </TableCell>

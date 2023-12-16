@@ -23,7 +23,7 @@ const Navbar = () => {
     });
   };
 
-  const renderItem = (index: number, text: string) => (
+  const renderItem = (index: number, text: string, route: string) => (
     <li
       className="group w-full"
       onMouseEnter={() => handleMouseEnter(index)}
@@ -31,7 +31,7 @@ const Navbar = () => {
       key={index}
     >
       <a
-        href="#"
+        href={route}
         className={`flex items-center  text-grayscale-400 px-2 py-3 rounded-lg ${
           hoveredItems[index] ? 'hover:bg-grayscale-800 hover:text-white' : ''
         }`}
@@ -43,18 +43,18 @@ const Navbar = () => {
           alt="링크 이미지"
         />
         <div>
-          <span className="mx-4 my-6 text-[16px]">{text}</span>
+          <span className="mx-4 my-6 text-[18px]">{text}</span>
         </div>
       </a>
     </li>
   );
 
   return (
-    <nav className="min-w-[200px] border-r border-brand-dark ">
+    <nav className="min-w-[240px] border-r border-brand-dark ">
       <div className="h-full px-3 py-4 overflow-y-auto">
         <ul className="space-y-3 font-medium">
-          {renderItem(0, '링크 리스트')}
-          {renderItem(1, '서비스 소개')}
+          {renderItem(0, '링크 리스트', '/dashboard')}
+          {renderItem(1, '서비스 소개', '/landing')}
           {/* 추가적인 항목이 있다면 여기에 renderItem을 추가하면 됩니다 */}
         </ul>
       </div>
