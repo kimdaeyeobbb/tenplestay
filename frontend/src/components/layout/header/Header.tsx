@@ -1,41 +1,27 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Input from '../../ui/Input';
-
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
-  if (!isOpen) {
-    return null;
-  }
-
-  return (
-    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-xl">
-        {/* 모달 내용이 들어갈 자리 */}
-        <p>로그인을 할 수 있는 내용</p>
-        <div className="flex items-center justify-center">
-          <button className="px-4 py-2 border flex gap-2 border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150">
-            <img
-              className="w-6 h-6"
-              src="https://www.svgrepo.com/show/475656/google-color.svg"
-              loading="lazy"
-              alt="google logo"
-            />
-            <span>구글 계정으로 로그인</span>
-          </button>
-        </div>{' '}
-        <div></div>
-        <button onClick={onClose}>닫기</button>
-      </div>
-    </div>
-  );
-};
+import LoginModal from '../../ui/modal/LoginModal';
+import { userCheckApi } from '../../../apis/userCheckApi';
+// import { useState, useEffect } from 'react';
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loginStatus, setLoginStatus] = useState(false);
+  const [userName, setUserName] = useState("");
+
+
+  const checkAuthorization = async () => {
+    try {
+      const response = await userCheckApi();
+      if (response.status === 200) {
+        setLoginStatus(true);
+        const { data: { data: { email } } } = response;
+        setUserName(email);
+      }
+    } catch (error) {
+      console.log('에러 확인: ', error);
+    }
+  };
 
   const handleButtonClick = (text: string) => {
     if (text === '로그아웃') {
@@ -52,12 +38,16 @@ const Header = () => {
     setIsModalOpen(false);
   };
 
+  useEffect(() => {
+    checkAuthorization();
+  }, []);
+
   return (
     <header className="border-b border-brand-dark py-4 px-4 sm:px-10 font-[sans-serif] min-h-[70px]">
       <div className="flex flex-wrap justify-between items-center gap-x-2 max-lg:gap-y-6">
         <a href="">
           <div className="flex items-center">
-            <img src="../../../../public/assets/images/logo.svg" alt="logo" />
+            <img src="assets/images/logo.svg" alt="logo" />
             <div className="text-grayscale-400 text-2xl font-semibold leading-9">
               공지드롭
             </div>
@@ -76,28 +66,31 @@ const Header = () => {
               placeholder="검색어 입력"
             />
           </li>
-          <li className="max-lg:border-b max-lg:py-2 px-3">
-            <a
-              href="#"
-              className="lg:hover:text-[#007bff] text-grayscale-400 block font-semibold text-[15px]"
-            >
-              유저 123님
-            </a>
-          </li>
-          <li className="text-[#D9D9D9]">|</li>
-          <li className="max-lg:border-b max-lg:py-2 px-3">
-            <a
-              href="#"
-              className="lg:hover:text-[#007bff] text-grayscale-400 block font-semibold text-[15px]"
-              onClick={() => handleButtonClick('로그인')}
-            >
-              로그인
-            </a>
-          </li>
+
+          {(loginStatus) ?
+            (<li className="max-lg:border-b max-lg:py-2 px-3">
+              <a
+                href="#"
+                className="lg:hover:text-[#007bff] text-grayscale-400 block font-semibold text-[15px]"
+              >
+                {userName}
+              </a>
+            </li>)
+            :
+            (<li className="max-lg:border-b max-lg:py-2 px-3">
+              <a
+                href="#"
+                className="lg:hover:text-[#007bff] text-grayscale-400 block font-semibold text-[15px]"
+                onClick={() => handleButtonClick('로그인')}
+              >
+                로그인
+              </a>
+            </li>)
+          }
         </ul>
       </div>
       {/* 모달 */}
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal} />
+      <LoginModal show={isModalOpen} onClose={handleCloseModal} />
     </header>
   );
 };

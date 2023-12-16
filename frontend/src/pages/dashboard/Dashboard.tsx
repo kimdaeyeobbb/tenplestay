@@ -358,7 +358,7 @@ const Dashboard = () => {
               </TableCell>
               <TableCell>
                 <TableCellMain>
-                  <TableImg src={url.websiteFavicon} />
+                  <TableImg src={(url.websiteFavicon) ? url.websiteFavicon : "https://tenplestay.kro.kr/logo.svg"} />
                   <div>
                     <span>{(url.websiteName) ? url.websiteName : getDomain(url.website)}</span>
                     <TableCellSpan><a href={url.website}>{url.website}</a></TableCellSpan>
@@ -375,8 +375,8 @@ const Dashboard = () => {
               <TableCell>{url.isActivate ? <TableButton>활성상태</TableButton> : <TableButton>비활성상태</TableButton>}</TableCell>
               <TableCell>
                 <div>
-                  <TableImg src="assets/images/icon/share-2.png" />
-                  <TableImg src="assets/images/icon/trash-2.png" />
+                  <TableImg src="assets/images/icon/share-2.svg" />
+                  <TableImg src="assets/images/icon/trash-2.svg" />
                 </div>
               </TableCell>
             </TableRow>
