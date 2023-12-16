@@ -8,18 +8,10 @@ import { postURLinfo } from '../../../apis/scraping/postURLinfo';
 
 interface ModalProps {
   closeModal: () => void;
-  isCheckedKakao: boolean;
-  isCheckedEmail: boolean;
-  toggleKakao: () => void;
-  toggleEmail: () => void;
 }
 
 const URLmodal: React.FC<ModalProps> = ({
   closeModal,
-  isCheckedKakao,
-  isCheckedEmail,
-  toggleKakao,
-  toggleEmail,
 }) => {
   /* 로딩스피너 */
   const [loading, setLoading] = useState(false);
@@ -83,7 +75,7 @@ const URLmodal: React.FC<ModalProps> = ({
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && !error) {
       addItem();
     }
@@ -200,25 +192,23 @@ const URLmodal: React.FC<ModalProps> = ({
               </div>
 
               <div
-                className={`self-stretch  bg-slate-600 rounded-lg justify-start items-center inline-flex  ${
-                  error ? 'border border-error-primary' : ''
-                }`}
+                className={`self-stretch  bg-slate-600 rounded-lg justify-start items-center inline-flex  ${error ? 'border border-error-primary' : ''
+                  }`}
               >
                 <input
                   type="text"
                   placeholder="5글자 이내 키워드"
                   value={keyword}
                   onChange={handleInputChange}
-                  onKeyDown={handleKeyDown}
+                  onKeyUp={handleKeyUp}
                   className={`grow self-stretch px-4 py-3 rounded-lg basis-0 text-slate-400 bg-slate-600 text-lg font-medium font-['SUIT'] leading-7 tracking-tight`}
                 />
               </div>
 
               {error && (
                 <div
-                  className={`self-stretch ${
-                    error ? 'text-error-primary' : 'text-slate-400'
-                  } 
+                  className={`self-stretch ${error ? 'text-error-primary' : 'text-slate-400'
+                    } 
                        text-sm font-normal font-['SUIT'] leading-normal tracking-tight`}
                 >
                   최대 3개의 키워드까지 등록됩니다.
@@ -240,12 +230,7 @@ const URLmodal: React.FC<ModalProps> = ({
             onClickKeyword={handleClovaKeywordClick}
           />
           {/* 안내 받을 수단 선택   */}
-          <ContactToolArea
-            isCheckedKakao={isCheckedKakao}
-            isCheckedEmail={isCheckedEmail}
-            toggleKakao={toggleKakao}
-            toggleEmail={toggleEmail}
-          />
+          <ContactToolArea />
         </article>
 
         {/* 버튼 */}

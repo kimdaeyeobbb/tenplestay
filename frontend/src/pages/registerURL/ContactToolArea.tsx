@@ -1,20 +1,8 @@
 import ContactToolHeader from './ContactToolHeader';
 
-interface ContactToolAreaProps {
-  isCheckedKakao: boolean;
-  isCheckedEmail: boolean;
-  toggleKakao: () => void;
-  toggleEmail: () => void;
-}
 
-const ContactToolArea: React.FC<ContactToolAreaProps> = ({
-  isCheckedKakao,
-  isCheckedEmail,
-  toggleKakao,
-  toggleEmail,
-}) => {
-  //   const checkedRadioPath = 'assets/images/button/radio_checked.png';
-  //   const uncheckedRadioPath = 'assets/images/button/radio_unchecked.png';
+
+const ContactToolArea = () => {
 
   return (
     <section className="self-stretch h-20 flex-col justify-start items-start gap-4 flex">
@@ -23,34 +11,15 @@ const ContactToolArea: React.FC<ContactToolAreaProps> = ({
       <div className="self-stretch justify-start items-start gap-12 inline-flex">
         <div className="grow shrink basis-0 flex-col justify-center items-start gap-4 inline-flex">
           <div
-            className={`justify-start items-center gap-4 inline-flex cursor-pointer ${
-              isCheckedKakao ? 'text-indigo-600' : 'text-slate-300'
-            }`}
-            onClick={toggleKakao}
+            className="justify-start items-center gap-4 inline-flex cursor-pointer"
           >
             <div
-              className={`w-6 h-6 rounded-sm border-2 border-slate-500 ${
-                isCheckedKakao ? 'bg-indigo-600' : ''
-              } ${isCheckedKakao ? 'border-none' : ''}`}
-              onClick={toggleKakao}
+              className="w-6 h-6 rounded-sm border-2 border-slate-500"
             />
-            {/* <div className="w-6 h-6 rounded-sm border-2 border-slate-500" />
-            <img
-              className="w-6 h-6 rounded-full "
-              src={isCheckedKakao ? checkedRadioPath : uncheckedRadioPath}
-              alt="Kakao"
-            /> */}
             <div className="text-lg font-medium font-['SUIT'] leading-7 tracking-tight">
               문자메시지 수신
             </div>
           </div>
-
-          {/* 핸드폰 번호 입력 필드 */}
-          {/* <div
-                  className={`self-stretch h-[52px] bg-slate-600 rounded-lg justify-start items-center inline-flex  ${
-                    cellphoneError ? 'border border-error-primary' : ''
-                  }`}
-                > */}
           <div
             className={`self-stretch h-[52px] bg-slate-600 rounded-lg justify-start items-center inline-flex`}
           >
@@ -63,26 +32,12 @@ const ContactToolArea: React.FC<ContactToolAreaProps> = ({
         </div>
         <div className="grow shrink basis-0 flex-col justify-center items-start gap-4 inline-flex">
           <div
-            className={`w-[167.67px] h-7 justify-start items-center gap-4 inline-flex cursor-pointer ${
-              isCheckedEmail ? 'text-indigo-600' : 'text-slate-300'
-            }`}
-            onClick={toggleEmail}
+            className="w-[167.67px] h-7 justify-start items-center gap-4 inline-flex cursor-pointer"
           >
             <div className="flex items-center me-4 gap-4">
               <div
-                className={`w-6 h-6 rounded-sm border-2 border-slate-500 ${
-                  isCheckedEmail ? 'bg-indigo-600' : ''
-                } ${isCheckedEmail ? 'border-none' : ''}`}
+                className="w-6 h-6 rounded-sm border-2 border-slate-500"
               />
-              {/* 
-              <input
-                id="email-checkbox"
-                type="checkbox"
-                value="email"
-                className={`w-6 h-6 rounded-sm border-2 border-slate-500 ${
-                  isCheckedEmail ? 'bg-indigo-600' : ''
-                }`}
-              /> */}
               <label
                 htmlFor="email-checkbox"
                 className="text-lg font-medium font-['SUIT'] leading-7 tracking-tight"
@@ -91,13 +46,6 @@ const ContactToolArea: React.FC<ContactToolAreaProps> = ({
               </label>
             </div>
           </div>
-
-          {/* 이메일 input 영역 */}
-          {/* <div
-                  className={`self-stretch h-[52px] bg-slate-600 rounded-lg justify-start items-center inline-flex  ${
-                    emailError ? 'border border-error-primary' : ''
-                  }`}
-                > */}
           <div
             className={`self-stretch h-[52px] bg-slate-600 rounded-lg justify-start items-center inline-flex`}
           >
