@@ -35,7 +35,7 @@ const Title = styled.h1`
   font-family: 'SUIT';
   font-style: normal;
   font-weight: 700;
-  font-size: 40px;
+  font-size: 30px;
   line-height: 52px;
   letter-spacing: -0.6px;
 `;
