@@ -113,7 +113,7 @@ async def main():
             bulk_send_log_data.append(
                 (
                     noti_with_scraping["id"],
-                    noti_result,
+                    json.dumps(noti_result),
                 )
             )
             await rep.update_noti_clear(noti_with_scraping["id"])
