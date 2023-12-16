@@ -229,7 +229,7 @@ const Dashboard = () => {
 
   // 키워드 문자열에서 , 로 분리 및 컴포넌트로 추출
   const renderKeywordComponent = (keyword: string) => {
-    if (keyword.length <= 0) {
+    if (!keyword || keyword.length <= 0) {
       return <TableKeyword>키워드가 없습니다.</TableKeyword>
     }
 
