@@ -3,11 +3,13 @@ import { useState } from 'react';
 interface RegisterKeywordProps {
   items: { id: number; text: string }[];
   onDeleteKeyword: (id: number) => void;
+  error: boolean;
 }
 
 const RegisterKeyword: React.FC<RegisterKeywordProps> = ({
   items,
   onDeleteKeyword,
+  error,
 }) => {
   const [keywordToDelete, setKeywordToDelete] = useState<number | null>(null);
 
@@ -24,7 +26,11 @@ const RegisterKeyword: React.FC<RegisterKeywordProps> = ({
 
   return (
     <div>
-      <div className="w-[558px] my-4 h-10 justify-start items-start gap-2 inline-flex">
+      <div
+        className={`w-[558px] ${
+          error ? 'mt-12' : 'mt-4'
+        } mb-4 h-10 justify-start items-start gap-2 inline-flex`}
+      >
         {items.map((item) => (
           <div
             key={item.id}
@@ -36,10 +42,7 @@ const RegisterKeyword: React.FC<RegisterKeywordProps> = ({
                 onClick={() => handleDeleteClick(item.id)}
                 className="absolute"
               >
-                <img
-                  src="../../../public/assets/images/icon/x.svg"
-                  alt="Delete Keyword"
-                />
+                <img src="/assets/images/icon/x.svg" alt="Delete Keyword" />
               </button>
             </div>
 

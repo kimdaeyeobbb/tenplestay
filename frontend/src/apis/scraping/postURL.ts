@@ -9,7 +9,7 @@ export const postURL = async (url: string) => {
       { url }, // 객체 형태로 전달
     );
 
-    console.log('postURL에서의 response: ', response);
+    // console.log('postURL에서의 response: ', response);
     return response;
   } catch (error) {
     throw error;
