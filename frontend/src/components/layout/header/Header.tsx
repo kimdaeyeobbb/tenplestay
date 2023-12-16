@@ -45,7 +45,7 @@ const Header = () => {
   return (
     <header className="border-b border-brand-dark py-4 px-4 sm:px-10 font-[sans-serif] min-h-[70px]">
       <div className="flex flex-wrap justify-between items-center gap-x-2 max-lg:gap-y-6">
-        <a href="">
+        <a href="/">
           <div className="flex items-center">
             <img src="assets/images/logo.svg" alt="logo" />
             <div className="text-grayscale-400 text-2xl font-semibold leading-9">
