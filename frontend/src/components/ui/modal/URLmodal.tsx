@@ -3,6 +3,7 @@ import { postURL } from '../../../apis/scraping/postURL';
 import LoadingSpinner from '../../../pages/registerURL/LoadingSpinner';
 import RegisterKeyword from '../../../pages/registerURL/RegisterKeyword';
 import ClovaArea from '../../../pages/registerURL/ClovaArea';
+import ContactToolArea from '../../../pages/registerURL/ContactToolArea';
 
 interface ModalProps {
   closeModal: () => void;
@@ -111,8 +112,8 @@ const URLmodal: React.FC<ModalProps> = ({
   };
 
   /* 안내 받을 수단 선택 */
-  const checkedRadioPath = 'assets/images/button/radio_checked.png';
-  const uncheckedRadioPath = 'assets/images/button/radio_unchecked.png';
+  // const checkedRadioPath = 'assets/images/button/radio_checked.png';
+  // const uncheckedRadioPath = 'assets/images/button/radio_unchecked.png';
 
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
@@ -211,83 +212,12 @@ const URLmodal: React.FC<ModalProps> = ({
             onClickKeyword={handleClovaKeywordClick}
           />
           {/* 안내 받을 수단 선택   */}
-          <section className="self-stretch h-20 flex-col justify-start items-start gap-4 flex">
-            <div className="self-stretch text-slate-50 text-xl font-semibold font-['SUIT'] leading-7">
-              안내 받을 수단 선택
-            </div>
-            <div className="self-stretch justify-start items-start gap-12 inline-flex">
-              <div className="grow shrink basis-0 flex-col justify-center items-start gap-4 inline-flex">
-                <div
-                  className={`justify-start items-center gap-4 inline-flex cursor-pointer ${
-                    isCheckedKakao ? 'text-indigo-600' : 'text-slate-300'
-                  }`}
-                  onClick={toggleKakao}
-                >
-                  <img
-                    className="w-6 h-6 rounded-full "
-                    src={isCheckedKakao ? checkedRadioPath : uncheckedRadioPath}
-                    alt="Kakao"
-                  />
-                  <div className="text-lg font-medium font-['SUIT'] leading-7 tracking-tight">
-                    문자메시지 수신
-                  </div>
-                </div>
-
-                {/* 핸드폰 번호 입력 필드 */}
-                {/* <div
-                  className={`self-stretch h-[52px] bg-slate-600 rounded-lg justify-start items-center inline-flex  ${
-                    cellphoneError ? 'border border-error-primary' : ''
-                  }`}
-                > */}
-                <div
-                  className={`self-stretch h-[52px] bg-slate-600 rounded-lg justify-start items-center inline-flex`}
-                >
-                  <input
-                    type="text"
-                    placeholder="010-0000-0000"
-                    className={`grow self-stretch px-4 py-3 rounded-lg basis-0 text-slate-400 bg-slate-600 text-lg font-medium font-['SUIT'] leading-7 tracking-tight`}
-                  />
-                </div>
-              </div>
-              <div className="grow shrink basis-0 flex-col justify-center items-start gap-4 inline-flex">
-                <div
-                  className={`w-[167.67px] h-7 justify-start items-center gap-4 inline-flex cursor-pointer ${
-                    isCheckedEmail ? 'text-indigo-600' : 'text-slate-300'
-                  }`}
-                  onClick={toggleEmail}
-                >
-                  <img
-                    className="w-6 h-6 rounded-full"
-                    src={
-                      isCheckedEmail
-                        ? '/src/assets/images/button/radio_checked.png'
-                        : '/src/assets/images/button/radio_unchecked.png'
-                    }
-                    alt="Email"
-                  />
-                  <div className="text-lg font-medium font-['SUIT'] leading-7 tracking-tight">
-                    E-Mail 수신
-                  </div>
-                </div>
-
-                {/* 이메일 input 영역 */}
-                {/* <div
-                  className={`self-stretch h-[52px] bg-slate-600 rounded-lg justify-start items-center inline-flex  ${
-                    emailError ? 'border border-error-primary' : ''
-                  }`}
-                > */}
-                <div
-                  className={`self-stretch h-[52px] bg-slate-600 rounded-lg justify-start items-center inline-flex`}
-                >
-                  <input
-                    type="email"
-                    placeholder="abcd@gmail.com"
-                    className={`grow self-stretch px-4 py-3 rounded-lg basis-0 text-slate-400 bg-slate-600 text-lg font-medium font-['SUIT'] leading-7 tracking-tight`}
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
+          <ContactToolArea
+            isCheckedKakao={isCheckedKakao}
+            isCheckedEmail={isCheckedEmail}
+            toggleKakao={toggleKakao}
+            toggleEmail={toggleEmail}
+          />
         </article>
 
         {/* 버튼 */}
