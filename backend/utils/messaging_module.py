@@ -3,6 +3,8 @@ from twilio.rest import Client
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
+from .messagin_cool_sms import send_a_message
+
 
 class MessagingModule:
     def __init__(self, run_time: str = "django", settings: dict = {}) -> None:
@@ -14,6 +16,8 @@ class MessagingModule:
             self.sms_from_num = settings.get("SMS_FROM_NUM")
             self.email_api_key = settings.get("EMAIL_API_KEY")
             self.email_from_mail = settings.get("EMAIL_FROM_EMAIL")
+            self.cool_sms_api_key = settings.get("COOL_API_KEY")
+            self.cool_sms_api_secret = settings.get("COOL_API_SECRET")
 
     def _django_env(self) -> None:
         from django.conf import settings
@@ -23,6 +27,8 @@ class MessagingModule:
         self.sms_from_num = settings.SMS_FROM_NUM
         self.email_api_key = settings.EMAIL_API_KEY
         self.email_from_mail = settings.EMAIL_FROM_EMAIL
+        self.cool_sms_api_key = settings.COOL_API_KEY
+        self.cool_sms_api_secret = settings.COOL_API_SECRET
 
     # Find your Account SID and Auth Token at twilio.com/console
     # and set the environment variables. See http://twil.io/secure
@@ -61,6 +67,15 @@ class MessagingModule:
             ),
         )
 
+    def send_cool_sms(self, to_number: str, body: str):
+        return send_a_message(
+            self.cool_sms_api_key,
+            self.cool_sms_api_secret,
+            self.sms_from_num,
+            to_number,
+            "공지드롭 URL 업데이트" + body,
+        )
+
     def send_email(self, to_address: str, html_content: str) -> dict:
         message = Mail(
             from_email=self.email_from_mail,
@@ -91,7 +106,7 @@ class MessagingModule:
             회원님이 공지드롭에 등록한 URL에 새로운 공지가 업데이트 소식을 알려드립니다. 💌
 
             ➡️ 업데이트 된 URL 확인하기
-            https://tenplestay.kro.kr/
+            {website}
 
             *본 알림톡은 수신자가 신청한 URL 안내를 위한 안내 문자입니다.
         """

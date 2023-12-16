@@ -20,6 +20,8 @@ SMS_AUTH_TOKEN = os.getenv("SMS_AUTH_TOKEN")
 SMS_FROM_NUM = os.getenv("SMS_FROM_NUM", "+12057516527")
 EMAIL_API_KEY = os.getenv("EMAIL_API_KEY")
 EMAIL_FROM_EMAIL = os.getenv("EMAIL_FROM_EMAIL", "hyeon.wo.dev@tenplestay.kro.kr")
+COOL_API_KEY = os.getenv("COOL_API_KEY")
+COOL_API_SECRET = os.getenv("COOL_API_SECRET")
 NOTI_PLATFORM_CHOICES = {
     "1": "email",
     "2": "kakaotalk",
@@ -30,7 +32,13 @@ NOTI_PLATFORM_CHOICES = {
 if not DB_URL:
     raise Exception("There is no DB_URL value in env value")
 
-if not SMS_ACCOUNT_ID or not SMS_AUTH_TOKEN or not EMAIL_API_KEY:
+if (
+    not SMS_ACCOUNT_ID
+    or not SMS_AUTH_TOKEN
+    or not EMAIL_API_KEY
+    or not COOL_API_KEY
+    or not COOL_API_SECRET
+):
     raise Exception("There is no NOTI API value in env value")
 
 settings = dict(
@@ -39,20 +47,27 @@ settings = dict(
     SMS_FROM_NUM=SMS_FROM_NUM,
     EMAIL_API_KEY=EMAIL_API_KEY,
     EMAIL_FROM_EMAIL=EMAIL_FROM_EMAIL,
+    COOL_API_KEY=COOL_API_KEY,
+    COOL_API_SECRET=COOL_API_SECRET,
 )
 
 
-def convert_to_serializable(data):
+def _convert_to_serializable(data):
     if isinstance(data, bytes):
         return data.decode("utf-8")
     elif isinstance(data, dict):
-        return {key: convert_to_serializable(value) for key, value in data.items()}
+        return {key: _convert_to_serializable(value) for key, value in data.items()}
     elif isinstance(data, list):
-        return [convert_to_serializable(element) for element in data]
+        return [_convert_to_serializable(element) for element in data]
     elif hasattr(data, "isoformat"):  # datetime 객체 확인
         return data.isoformat()
     else:
         return data
+
+
+def _convert_to_full_number(phone_number: str):
+    """+821011112222 -> 01011112222"""
+    return phone_number.replace("+82", "0")
 
 
 # 일단 retry 고민 없이, main platfrom으로만 단발성으로 발송 진행
@@ -66,8 +81,8 @@ async def send_noti(message_moduel: MessagingModule, noti_with_scraping: dict):
         result = message_moduel.send_email(noti_with_scraping["email"], html_content)
     elif main_platform == "sms":
         sms_content = message_moduel.get_sms_template(noti_with_scraping["website"])
-        result = message_moduel.send_sms(
-            noti_with_scraping["phone_number"], sms_content
+        result = message_moduel.send_cool_sms(
+            _convert_to_full_number(noti_with_scraping["phone_number"]), sms_content
         )
     return result
 
@@ -98,7 +113,7 @@ async def main():
             bulk_send_log_data.append(
                 (
                     noti_with_scraping["id"],
-                    json.dumps(convert_to_serializable(noti_result)),
+                    noti_result,
                 )
             )
             await rep.update_noti_clear(noti_with_scraping["id"])
