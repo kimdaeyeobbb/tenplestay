@@ -48,6 +48,7 @@ class ScrapingUrlListCreateAPIView(generics.ListCreateAPIView):
         website_favicon = get_website_favicon(scraping_url.website)
         if len(website_favicon) > 200:
             website_favicon = website_favicon[:200]
+
         scraping_url.website_favicon = website_favicon
         scraping_url.user = request.user
         scraping_url.save()

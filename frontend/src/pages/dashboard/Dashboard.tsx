@@ -6,6 +6,8 @@ interface ScrapingUrl {
   id: number;
   lastScrapingLog: string | null;
   website: string;
+  websiteName: string;
+  websiteFavicon: string;
   keywords: string;
   isStatic: boolean;
   isActivate: boolean;
@@ -98,7 +100,52 @@ const TableCell = styled.td`
   /* overflow: hidden; */
   text-overflow: ellipsis;
   white-space: nowrap; // 텍스트가 넘칠 경우 말줄임표로 처리
+`;
 
+const TableCellMain = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+  & > img {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--Radious-4, 4px);
+    background: url(<path-to-image>), lightgray 50% / cover no-repeat;
+    margin-right: 10px;
+  }
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`;
+
+const TableCellSpan = styled.span`
+    color: var(--GrayScale-500, #64748B);
+    text-overflow: ellipsis;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px;
+    letter-spacing: 0.2px;
+`;
+
+const TableKeywordWrapper = styled.div`
+  display: flex;
+  height: 64px;
+  padding: 4px var(--Spacing-24, 24px);
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+`;
+
+const TableKeyword = styled.div`
+  border-radius: 999999px;
+  border: 1px solid var(--GrayScale-500, #64748B);
+  padding: 6px 16px 6px 16px;
 `;
 
 const TableButton = styled.button`
@@ -165,7 +212,7 @@ const Dashboard = () => {
     previous: null,
   });
 
-
+  // 문자열로 받은 데이터를 특정 포멧으로 바꾸기
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -174,6 +221,29 @@ const Dashboard = () => {
     return `${year}.${month}.${day}`;
   };
 
+  // 받은 url로부터 domain 값만 추출하기
+  const getDomain = (url: string) => {
+    const parsedUrl = new URL(url);
+    return parsedUrl.hostname;
+  };
+
+  // 키워드 문자열에서 , 로 분리 및 컴포넌트로 추출
+  const renderKeywordComponent = (keyword: string) => {
+    if (keyword.length <= 0) {
+      return <TableKeyword>키워드가 없습니다.</TableKeyword>
+    }
+
+    const keyword_list = keyword.split(",")
+    let keyword_comps = [];
+    for (let i = 0; i < keyword_list.length; i++) {
+      keyword_comps.push(
+        <TableKeyword>
+          {keyword_list[i]}
+        </TableKeyword>
+      )
+    }
+    return keyword_comps;
+  };
 
   const getAllScrapingUrl = async (page: number = 1) => {
     const { data: { data } } = await fetchAllScrapingUrl(page);
@@ -211,7 +281,6 @@ const Dashboard = () => {
   };
 
 
-
   useEffect(() => {
     getAllScrapingUrl(1);
   }, []);
@@ -239,8 +308,20 @@ const Dashboard = () => {
               <TableCell>
                 <TableCheckBox type="checkbox" />
               </TableCell>
-              <TableCell>{url.website}</TableCell>
-              <TableCell>{url.keywords}</TableCell>
+              <TableCell>
+                <TableCellMain>
+                  <TableImg src={url.websiteFavicon} />
+                  <div>
+                    <span>{(url.websiteName) ? url.websiteName : getDomain(url.website)}</span>
+                    <TableCellSpan>{url.website}</TableCellSpan>
+                  </div>
+                </TableCellMain>
+              </TableCell>
+              <TableCell>
+                <TableKeywordWrapper>
+                  {renderKeywordComponent(url.keywords)}
+                </TableKeywordWrapper>
+              </TableCell>
               <TableCell>{formatDate(url.createdAt)}</TableCell>
               <TableCell>{formatDate(url.updatedAt)}</TableCell>
               <TableCell>{url.isActivate ? <TableButton>활성상태</TableButton> : <TableButton>비활성상태</TableButton>}</TableCell>

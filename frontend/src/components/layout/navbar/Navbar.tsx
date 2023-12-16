@@ -25,7 +25,7 @@ const Navbar = () => {
 
   const renderItem = (index: number, text: string) => (
     <li
-      className="group w-full "
+      className="group w-full"
       onMouseEnter={() => handleMouseEnter(index)}
       onMouseLeave={() => handleMouseLeave(index)}
       key={index}
@@ -50,7 +50,7 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="min-w-[13%] border-r border-brand-dark ">
+    <nav className="min-w-[12%] border-r border-brand-dark ">
       <div className="h-full px-3 py-4 overflow-y-auto">
         <ul className="space-y-3 font-medium">
           {renderItem(0, '링크 리스트')}
