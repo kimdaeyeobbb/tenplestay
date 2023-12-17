@@ -60,13 +60,25 @@ class ScrapingUrlAdmin(admin.ModelAdmin):
 
 @admin.register(ScrapingLog)
 class ScrapingLogAdmin(admin.ModelAdmin):
-    list_display = ("result_str", "error_status", "created_at", "updated_at")
+    list_display = (
+        "id",
+        "target_scraping_url",
+        "result_str",
+        "error_status",
+        "created_at",
+        "updated_at",
+    )
     list_filter = ("is_error",)
     search_fields = ("result",)
 
     @admin.display(description="Scraping Result")
     def result_str(self, obj: ScrapingLog):
         return format_html("<div>{}</div>", obj.__str__())
+
+    @admin.display(description="Target Scraping Url")
+    def target_scraping_url(self, obj: ScrapingLog):
+        target_scarping_urls = obj.scrapingurl_set.all()
+        return f"[{target_scarping_urls.count()}개] {target_scarping_urls.order_by('-created_at').first()}"
 
     @admin.display(description="Error Status")
     def error_status(self, obj: ScrapingLog):
