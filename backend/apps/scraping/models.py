@@ -108,6 +108,9 @@ class ScrapingUrl(BaseModel):
         ]
         verbose_name = "스크레이핑URL"
 
+    def __str__(self) -> str:
+        return f"{self.id}, {self.website_name}"
+
 
 class ScrapingLog(BaseModel):
     result = models.TextField(
@@ -125,7 +128,7 @@ class ScrapingLog(BaseModel):
     )
 
     def __str__(self) -> str:
-        return f"{self.result[:40]}"
+        return f"{self.id}, {self.result[:40]}"
 
     class Meta:
         verbose_name = verbose_name_plural = "스크레이핑이력"

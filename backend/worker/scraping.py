@@ -6,6 +6,7 @@ from concurrent.futures import ProcessPoolExecutor
 
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
+from aiohttp import ClientTimeout
 from aiohttp_retry import ExponentialRetry, RetryClient
 from fake_useragent import UserAgent
 
@@ -31,20 +32,28 @@ async def fetch_url(session: RetryClient, url: str):
         "Upgrade-Insecure-Requests": "1",
         "Cache-Control": "max-age=0",
     }
+    timeout = ClientTimeout(total=30)
 
-    async with session.get(url, headers=headers) as response:
-        html_content = await response.text()
-        soup = BeautifulSoup(html_content, "lxml")
+    try:
+        async with session.get(url, headers=headers, timeout=timeout) as response:
+            if response.status != 200:
+                raise Exception(f"HTTP error: {response.status}")
 
-        # Remove all script tags
-        for script_tag in soup.find_all("script"):
-            script_tag.decompose()
+            html_content = await response.text()
+            soup = BeautifulSoup(html_content, "lxml")
 
-        body = soup.body
-        if body:
-            return str(body)
-        else:
-            return ""
+            # Remove all script tags
+            for script_tag in soup.find_all("script"):
+                script_tag.decompose()
+
+            body = soup.body
+            if body:
+                return str(body)
+            else:
+                return ""
+    except Exception as e:
+        log.error(f"Error fetching {url}: {e}")
+        return ""  # 오류 발생 시 빈 문자열 반환
 
 
 async def fetch_all_url(scraping_urls: list[dict]):
@@ -129,8 +138,6 @@ async def scrapping(rep: Repository, group_id: str):
                 scraping_url["id"], err_msg, True
             )
             continue
-
-    await rep.close()
 
 
 def run_scrapping(group_id: str):
