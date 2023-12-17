@@ -73,7 +73,7 @@ class MessagingModule:
             self.cool_sms_api_secret,
             self.sms_from_num,
             to_number,
-            "공지드롭 URL 업데이트" + body,
+            "공지드롭 URL 업데이트\n" + body,
         )
 
     def send_email(self, to_address: str, html_content: str) -> dict:
