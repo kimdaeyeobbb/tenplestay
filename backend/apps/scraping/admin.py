@@ -7,7 +7,7 @@ from .models import ScrapingUrl, ScrapingLog, ScrapingGroup
 @admin.register(ScrapingUrl)
 class ScrapingUrlAdmin(admin.ModelAdmin):
     list_display = (
-        "website",
+        "website_url",
         "user",
         "last_scraping_log_str",
         "error_status",
@@ -26,6 +26,14 @@ class ScrapingUrlAdmin(admin.ModelAdmin):
         queryset = super().get_queryset(request)
         queryset = queryset.select_related("last_scraping_log")
         return queryset
+
+    @admin.display(description="website url")
+    def website_url(self, obj: ScrapingUrl):
+        web_url = str(obj.website)
+        if len(web_url) > 20:
+            return f"{str(obj.website)[:20]}..."
+        else:
+            web_url
 
     @admin.display(description="Scraping Status")
     def last_scraping_log_str(self, obj: ScrapingUrl):
