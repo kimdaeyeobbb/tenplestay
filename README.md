@@ -2,14 +2,14 @@
 
 # 공지드롭
 
-> 매번 놓치는 공지사항, 무한 새로 고침은 이제 그만!
-> **공지드롭**이 여러분이 기다리는 새로운 공지 소식을 알려드릴게요 💌
+> 매번 놓치는 공지사항, 무한 새로 고침은 이제 그만! <br />
+> **공지드롭**이 여러분이 기다리는 새로운 공지 소식을 알려드릴게요 💌 <br />
 > with [비사이드 - 포텐데이](https://bside.best/potenday)
 
 ![서비스 소개 이미지](https://file.notion.so/f/f/5ea6a3fb-af5a-4ce1-8280-aff25caaa591/640043af-cd2c-43da-bb66-fb542005231f/Untitled.png?id=2a4e192f-d233-43ff-a0d6-6dc7fd9d6a2e&table=block&spaceId=5ea6a3fb-af5a-4ce1-8280-aff25caaa591&expirationTimestamp=1702900800000&signature=1akmoU_-mFf-VOxttdi_V8pIU6loKUsSoMsbosgPSYY&downloadName=Untitled.png)
 
-***[서비스 보러가기 ✨](https://tenplestay.kro.kr)***
-구체적인 내용을 알고 싶다면? [🔖 서비스 소개 노션 페이지](https://nuung.notion.site/5951b8af10ac4b86bf33150b36045549?pvs=4)
+***[서비스 보러가기 ✨](https://tenplestay.kro.kr)*** <br />
+구체적인 내용을 알고 싶다면? [🔖 서비스 소개 노션 페이지](https://nuung.notion.site/5951b8af10ac4b86bf33150b36045549?pvs=4) <br />
 
 ## 1. Getting started
 
