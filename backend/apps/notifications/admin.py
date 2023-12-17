@@ -84,8 +84,12 @@ class NotiAdmin(admin.ModelAdmin):
 @admin.register(NotiSendLog)
 class NotiSendLogAdmin(admin.ModelAdmin):
     list_display = ("noti", "created_at", "updated_at", "pretty_json")
+    list_filter = ("noti__main_noti_platform", "noti__sub_noti_platform")
 
     @admin.display(description="Sending Result")
     def pretty_json(self, instance):
         """JSON 필드를 이쁘게 표시하는 메서드"""
-        return format_html("<pre>{}</pre>", json.dumps(instance.result, indent=4))
+        result_json_str = json.dumps(instance.result, indent=4)
+        if len(result_json_str) > 100:
+            result_json_str = result_json_str[:100] + "\n..."
+        return format_html("<pre>{}</pre>", result_json_str)

@@ -16,7 +16,7 @@ class NotiPlatform(BaseModel):
 
     def __str__(self):
         return f"{self.platform_num} - {self.get_platform_num_display()}"
-    
+
     class Meta:
         verbose_name = verbose_name_plural = "알림플랫폼"
 
@@ -66,6 +66,11 @@ class Noti(BaseModel):
 
     class Meta:
         verbose_name = verbose_name_plural = "알림"
+
+    def __str__(self) -> str:
+        return (
+            f"[{self.id}, {self.user}] {self.scraping_url} to {self.main_noti_platform}"
+        )
 
 
 class NotiSendLog(BaseModel):
